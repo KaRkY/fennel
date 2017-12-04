@@ -1,6 +1,7 @@
-package org.fennel.api.users;
+package org.fennel.api.users.commands;
 
 import org.axonframework.commandhandling.TargetAggregateIdentifier;
+import org.fennel.api.users.UserId;
 
 public class UnlockUserCommand {
 

@@ -7,38 +7,44 @@ import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.commandhandling.model.AggregateLifecycle;
 import org.axonframework.commandhandling.model.AggregateRoot;
 import org.axonframework.eventsourcing.EventSourcingHandler;
-import org.fennel.api.users.ConfirmUserCommand;
-import org.fennel.api.users.CreateUserCommand;
-import org.fennel.api.users.LockUserCommand;
-import org.fennel.api.users.NewUserPin;
-import org.fennel.api.users.NewUserPinCommand;
-import org.fennel.api.users.UnlockUserCommand;
-import org.fennel.api.users.UserConfirmationRequested;
-import org.fennel.api.users.UserConfirmed;
-import org.fennel.api.users.UserCreated;
-import org.fennel.api.users.UserCreationRequested;
+import org.fennel.api.users.Password;
 import org.fennel.api.users.UserId;
-import org.fennel.api.users.UserLocked;
-import org.fennel.api.users.UserUnlocked;
+import org.fennel.api.users.Username;
+import org.fennel.api.users.commands.AuthorizeCommand;
+import org.fennel.api.users.commands.ConfirmUserCommand;
+import org.fennel.api.users.commands.CreateUserCommand;
+import org.fennel.api.users.commands.LockUserCommand;
+import org.fennel.api.users.commands.NewUserPinCommand;
+import org.fennel.api.users.commands.UnlockUserCommand;
+import org.fennel.api.users.events.NewUserPinEvent;
+import org.fennel.api.users.events.UserAuthorizationFailedEvent;
+import org.fennel.api.users.events.UserAuthorizedEvent;
+import org.fennel.api.users.events.UserConfirmationRequestedEvent;
+import org.fennel.api.users.events.UserConfirmedEvent;
+import org.fennel.api.users.events.UserCreatedEvent;
+import org.fennel.api.users.events.UserCreationRequestedEvent;
+import org.fennel.api.users.events.UserLockedEvent;
+import org.fennel.api.users.events.UserUnlockedEvent;
 
 @AggregateRoot
 public class User implements Serializable {
   private static final long serialVersionUID = -1774630893759721415L;
 
   @AggregateIdentifier
-  private UserId userId;
-  private String displayName;
-  private String username;
-  private String password;
-  private String pin;
-  private  boolean locked = false;
+  private UserId   userId;
+  private String   displayName;
+  private Username username;
+  private Password password;
+  private String   pin;
+  private boolean  locked    = false;
+  private boolean  confirmed = false;
 
   public User() {
   }
 
   @CommandHandler
   public User(final CreateUserCommand command) {
-    AggregateLifecycle.apply(new UserCreationRequested(
+    AggregateLifecycle.apply(new UserCreationRequestedEvent(
       command.getUserId(),
       command.getDisplayName(),
       command.getUsername(),
@@ -48,37 +54,49 @@ public class User implements Serializable {
 
   @CommandHandler
   public boolean handleConfirmUserCommand(final ConfirmUserCommand activateUserCommand) {
-    AggregateLifecycle.apply(new UserConfirmationRequested(userId, activateUserCommand.getPin()));
+    AggregateLifecycle.apply(new UserConfirmationRequestedEvent(userId, activateUserCommand.getPin()));
     if (pin != null && pin.equals(activateUserCommand.getPin())) {
-      AggregateLifecycle.apply(new UserConfirmed(userId));
-      AggregateLifecycle.apply(new UserCreated(userId, displayName, username, password));
+      AggregateLifecycle.apply(new UserConfirmedEvent(userId));
+      AggregateLifecycle.apply(new UserCreatedEvent(userId, displayName, username, password));
       return true;
-    } else {
-      return pin == null;
-    }
+    } else return pin == null;
   }
 
   @CommandHandler
   public void handleNewUserPinCommand(final NewUserPinCommand newUserPinCommand) {
-    AggregateLifecycle.apply(new NewUserPin(userId, newUserPinCommand.getPin()));
+    AggregateLifecycle.apply(new NewUserPinEvent(userId, newUserPinCommand.getPin()));
   }
 
   @CommandHandler
   public void handleLockUserCommand(final LockUserCommand lockUserCommand) {
     if (!locked) {
-      AggregateLifecycle.apply(new UserLocked(userId));
+      AggregateLifecycle.apply(new UserLockedEvent(userId));
     }
   }
 
   @CommandHandler
   public void handleLockUserCommand(final UnlockUserCommand unlockUserCommand) {
     if (locked) {
-      AggregateLifecycle.apply(new UserUnlocked(userId));
+      AggregateLifecycle.apply(new UserUnlockedEvent(userId));
+    }
+  }
+
+  @CommandHandler
+  public boolean handleAuthorizeCommand(final AuthorizeCommand authorizeCommand) {
+    if (username.equals(authorizeCommand.getUsername()) &&
+      password.equals(authorizeCommand.getPassword()) &&
+      !locked &&
+      confirmed) {
+      AggregateLifecycle.apply(new UserAuthorizedEvent(userId));
+      return true;
+    } else {
+      AggregateLifecycle.apply(new UserAuthorizationFailedEvent(userId, confirmed, locked));
+      return false;
     }
   }
 
   @EventSourcingHandler
-  public void onUserCreationRequested(final UserCreationRequested event) {
+  public void onUserCreationRequested(final UserCreationRequestedEvent event) {
     userId = event.getUserId();
     displayName = event.getDisplayName();
     username = event.getUsername();
@@ -87,22 +105,23 @@ public class User implements Serializable {
   }
 
   @EventSourcingHandler
-  public void onUserConfirmed(final UserConfirmed event) {
+  public void onUserConfirmed(final UserConfirmedEvent event) {
     pin = null;
+    confirmed = true;
   }
 
   @EventSourcingHandler
-  public void onNewUserPin(final NewUserPin event) {
+  public void onNewUserPin(final NewUserPinEvent event) {
     pin = event.getPin();
   }
 
   @EventSourcingHandler
-  public void onUserLocked(final UserLocked event) {
+  public void onUserLocked(final UserLockedEvent event) {
     locked = true;
   }
 
   @EventSourcingHandler
-  public void onUserUnlocked(final UserUnlocked event) {
+  public void onUserUnlocked(final UserUnlockedEvent event) {
     locked = false;
   }
 }

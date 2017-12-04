@@ -1,0 +1,26 @@
+--- Users ---
+ - Group locking
+ - Group unlocking
+ - Simple query model
+ - Simple management GUI
+
+--- Customers ---
+ - Define which data is needed for customer(VAT number, Name, etc.)
+ - Adding of addresses
+ - Removing addresses
+ - Adding contacts
+ - Removing contacts
+
+--- Other ---
+ - Products?
+ - Support requests?
+ - Tasks?
+ - Event stream(what is currently happening)
+ - Contacts aka Call aka Email aka Meeting
+ - Add event origin and creator to events
+ - Should event extend common class?
+ - Document API
+ - Meetings
+
+--- Presentation GUI ---
+ - Reports

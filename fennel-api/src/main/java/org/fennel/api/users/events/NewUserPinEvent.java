@@ -1,11 +1,13 @@
-package org.fennel.api.users;
+package org.fennel.api.users.events;
 
-public class UserConfirmationRequested {
+import org.fennel.api.users.UserId;
+
+public class NewUserPinEvent {
 
   private final UserId userId;
   private final String pin;
 
-  public UserConfirmationRequested(final UserId userId, final String pin) {
+  public NewUserPinEvent(final UserId userId, final String pin) {
     this.userId = userId;
     this.pin = pin;
   }
@@ -17,4 +19,5 @@ public class UserConfirmationRequested {
   public String getPin() {
     return pin;
   }
+
 }
