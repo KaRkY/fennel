@@ -140,5 +140,6 @@
     <module>fennel-users</module>
     <module>fennel-api</module>
     <module>fennel-customers</module>
+    <module>fennel-tasks</module>
   </modules>
 </project>

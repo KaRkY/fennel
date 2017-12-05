@@ -11,10 +11,13 @@
  - Adding contacts
  - Removing contacts
 
+--- Tasks ---
+ - Implement Task lifecycle (Assign, Claim, Escalate(Quarz timer), Release, Intermediat save, etc.)
+ - Taks data(Title, Description, Connections to other Aggregates)
+
 --- Other ---
  - Products?
  - Support requests?
- - Tasks?
  - Event stream(what is currently happening)
  - Contacts aka Call aka Email aka Meeting
  - Add event origin and creator to events
