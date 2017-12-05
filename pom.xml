@@ -13,7 +13,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.0.0.M6</version>
+    <version>2.0.0.M7</version>
     <relativePath /> <!-- lookup parent from repository -->
   </parent>
 
@@ -30,6 +30,7 @@
     <immutables.version>2.5.5</immutables.version>
     <jackson.version>2.9.2</jackson.version>
     <axon.version>3.0.7</axon.version>
+    <postgres.version>42.1.4</postgres.version>
   </properties>
 
   <build>
@@ -91,6 +92,12 @@
 
       <dependency>
         <groupId>org.axonframework</groupId>
+        <artifactId>axon-spring</artifactId>
+        <version>${axon.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.axonframework</groupId>
         <artifactId>axon-test</artifactId>
         <version>${axon.version}</version>
       </dependency>
@@ -137,9 +144,11 @@
   </pluginRepositories>
 
   <modules>
-    <module>fennel-users</module>
     <module>fennel-api</module>
-    <module>fennel-customers</module>
-    <module>fennel-tasks</module>
+    <module>fennel-users-command</module>
+    <module>fennel-users-query</module>
+    <module>fennel-customers-command</module>
+    <module>fennel-tasks-command</module>
+    <module>fennel-rest</module>
   </modules>
 </project>
