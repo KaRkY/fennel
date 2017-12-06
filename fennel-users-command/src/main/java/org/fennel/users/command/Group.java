@@ -37,35 +37,48 @@ public class Group implements Serializable {
 
   @CommandHandler
   public Group(final CreateGroupCommand command) {
-    AggregateLifecycle.apply(new GroupCreatedEvent(command.getGroupName()));
+    AggregateLifecycle.apply(GroupCreatedEvent.builder()
+      .groupName(command.getGroupName())
+      .build());
   }
 
   @CommandHandler
   public void handleAddRoleCommand(final AddRoleToGroupCommand command) {
     if (!roles.contains(command.getRoleName())) {
-      AggregateLifecycle.apply(new RoleAddedToGroupEvent(command.getGroupName(), command.getRoleName()));
+      AggregateLifecycle.apply(RoleAddedToGroupEvent.builder()
+        .groupName(command.getGroupName())
+        .roleName(command.getRoleName())
+        .build());
     }
   }
 
   @CommandHandler
   public void handleRemoveRoleCommand(final RemoveRoleFromGroupCommand command) {
     if (roles.contains(command.getRoleName())) {
-      AggregateLifecycle.apply(new RoleRemovedFromGroupEvent(command.getGroupName(), command.getRoleName()));
+      AggregateLifecycle.apply(RoleRemovedFromGroupEvent.builder()
+        .groupName(command.getGroupName())
+        .roleName(command.getRoleName())
+        .build());
     }
   }
 
   @CommandHandler
   public void handleAddPermissionCommand(final AddPermissionToGroupCommand command) {
     if (!permissions.contains(command.getPermissionName())) {
-      AggregateLifecycle.apply(new PermissionAddedToGroupEvent(command.getGroupName(), command.getPermissionName()));
+      AggregateLifecycle.apply(PermissionAddedToGroupEvent.builder()
+        .groupName(command.getGroupName())
+        .permissionName(command.getPermissionName())
+        .build());
     }
   }
 
   @CommandHandler
   public void handleRemovePermissionCommand(final RemovePermissionFromGroupCommand command) {
     if (permissions.contains(command.getPermissionName())) {
-      AggregateLifecycle
-        .apply(new PermissionRemovedFromGroupEvent(command.getGroupName(), command.getPermissionName()));
+      AggregateLifecycle.apply(PermissionRemovedFromGroupEvent.builder()
+        .groupName(command.getGroupName())
+        .permissionName(command.getPermissionName())
+        .build());
     }
   }
 

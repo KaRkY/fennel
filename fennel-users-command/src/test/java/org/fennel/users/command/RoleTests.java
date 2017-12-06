@@ -24,25 +24,45 @@ public class RoleTests {
   public void createGroup() throws Exception {
     fixture
       .given()
-      .when(new CreateRoleCommand(RoleName.of("root")))
-      .expectEvents(new RoleCreatedEvent(RoleName.of("root")));
+      .when(CreateRoleCommand.builder()
+        .roleName(RoleName.of("root"))
+        .build())
+      .expectEvents(RoleCreatedEvent.builder()
+        .roleName(RoleName.of("root"))
+        .build());
   }
 
   @Test
   public void addPermission() throws Exception {
     fixture
-      .given(new RoleCreatedEvent(RoleName.of("root")))
-      .when(new AddPermissionToRoleCommand(RoleName.of("root"), PermissionName.of("root")))
-      .expectEvents(new PermissionAddedToRoleEvent(RoleName.of("root"), PermissionName.of("root")));
+      .given(RoleCreatedEvent.builder()
+        .roleName(RoleName.of("root"))
+        .build())
+      .when(AddPermissionToRoleCommand.builder()
+        .roleName(RoleName.of("root"))
+        .permissionName(PermissionName.of("root"))
+        .build())
+      .expectEvents(PermissionAddedToRoleEvent.builder()
+        .roleName(RoleName.of("root"))
+        .permissionName(PermissionName.of("root"))
+        .build());
   }
 
   @Test
   public void addExistingPermission() throws Exception {
     fixture
       .given(
-        new RoleCreatedEvent(RoleName.of("root")),
-        new PermissionAddedToRoleEvent(RoleName.of("root"), PermissionName.of("root")))
-      .when(new AddPermissionToRoleCommand(RoleName.of("root"), PermissionName.of("root")))
+        RoleCreatedEvent.builder()
+          .roleName(RoleName.of("root"))
+          .build(),
+        PermissionAddedToRoleEvent.builder()
+          .roleName(RoleName.of("root"))
+          .permissionName(PermissionName.of("root"))
+          .build())
+      .when(AddPermissionToRoleCommand.builder()
+        .roleName(RoleName.of("root"))
+        .permissionName(PermissionName.of("root"))
+        .build())
       .expectEvents();
   }
 
@@ -50,17 +70,33 @@ public class RoleTests {
   public void removePermission() throws Exception {
     fixture
       .given(
-        new RoleCreatedEvent(RoleName.of("root")),
-        new PermissionAddedToRoleEvent(RoleName.of("root"), PermissionName.of("root")))
-      .when(new RemovePermissionFromRoleCommand(RoleName.of("root"), PermissionName.of("root")))
-      .expectEvents(new PermissionRemovedFromRoleEvent(RoleName.of("root"), PermissionName.of("root")));
+        RoleCreatedEvent.builder()
+          .roleName(RoleName.of("root"))
+          .build(),
+        PermissionAddedToRoleEvent.builder()
+          .roleName(RoleName.of("root"))
+          .permissionName(PermissionName.of("root"))
+          .build())
+      .when(RemovePermissionFromRoleCommand.builder()
+        .roleName(RoleName.of("root"))
+        .permissionName(PermissionName.of("root"))
+        .build())
+      .expectEvents(PermissionRemovedFromRoleEvent.builder()
+        .roleName(RoleName.of("root"))
+        .permissionName(PermissionName.of("root"))
+        .build());
   }
 
   @Test
   public void removeNonExistingPermission() throws Exception {
     fixture
-      .given(new RoleCreatedEvent(RoleName.of("root")))
-      .when(new RemovePermissionFromRoleCommand(RoleName.of("root"), PermissionName.of("root")))
+      .given(RoleCreatedEvent.builder()
+        .roleName(RoleName.of("root"))
+        .build())
+      .when(RemovePermissionFromRoleCommand.builder()
+        .roleName(RoleName.of("root"))
+        .permissionName(PermissionName.of("root"))
+        .build())
       .expectEvents();
   }
 }

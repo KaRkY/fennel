@@ -3,16 +3,18 @@ package org.fennel.api.users.commands;
 import org.axonframework.commandhandling.TargetAggregateIdentifier;
 import org.fennel.api.users.RoleName;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.Value;
+
+@Value
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateRoleCommand {
 
   @TargetAggregateIdentifier
   private final RoleName roleName;
-
-  public CreateRoleCommand(final RoleName roleName) {
-    this.roleName = roleName;
-  }
-
-  public RoleName getRoleName() {
-    return roleName;
-  }
 }

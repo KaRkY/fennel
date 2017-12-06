@@ -9,6 +9,7 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.fennel.api.users.Password;
 import org.fennel.api.users.UserId;
+import org.fennel.api.users.UserPin;
 import org.fennel.api.users.Username;
 import org.fennel.api.users.commands.AuthorizeCommand;
 import org.fennel.api.users.commands.ConfirmUserCommand;
@@ -35,7 +36,7 @@ public class User implements Serializable {
   private String   displayName;
   private Username username;
   private Password password;
-  private String   pin;
+  private UserPin  pin;
   private boolean  locked    = false;
   private boolean  confirmed = false;
 
@@ -44,53 +45,77 @@ public class User implements Serializable {
 
   @CommandHandler
   public User(final CreateUserCommand command) {
-    AggregateLifecycle.apply(new UserCreationRequestedEvent(
-      command.getUserId(),
-      command.getDisplayName(),
-      command.getUsername(),
-      command.getPassword(),
-      command.getPin()));
+    AggregateLifecycle.apply(UserCreationRequestedEvent.builder()
+      .userId(command.getUserId())
+      .displayName(command.getDisplayName())
+      .username(command.getUsername())
+      .password(command.getPassword())
+      .pin(command.getPin())
+      .build());
   }
 
   @CommandHandler
-  public boolean handleConfirmUserCommand(final ConfirmUserCommand activateUserCommand) {
-    AggregateLifecycle.apply(new UserConfirmationRequestedEvent(userId, activateUserCommand.getPin()));
-    if (pin != null && pin.equals(activateUserCommand.getPin())) {
-      AggregateLifecycle.apply(new UserConfirmedEvent(userId));
-      AggregateLifecycle.apply(new UserCreatedEvent(userId, displayName, username, password));
+  public boolean handleConfirmUserCommand(final ConfirmUserCommand command) {
+    AggregateLifecycle.apply(UserConfirmationRequestedEvent.builder()
+      .userId(command.getUserId())
+      .pin(command.getPin())
+      .build());
+    if (pin != null && pin.equals(command.getPin())) {
+      AggregateLifecycle.apply(UserConfirmedEvent.builder()
+        .userId(command.getUserId())
+        .build());
+      AggregateLifecycle.apply(UserCreatedEvent.builder()
+        .userId(userId)
+        .displayName(displayName)
+        .username(username)
+        .password(password)
+        .build());
       return true;
     } else return pin == null;
   }
 
   @CommandHandler
-  public void handleNewUserPinCommand(final NewUserPinCommand newUserPinCommand) {
-    AggregateLifecycle.apply(new NewUserPinEvent(userId, newUserPinCommand.getPin()));
+  public void handleNewUserPinCommand(final NewUserPinCommand command) {
+    AggregateLifecycle.apply(NewUserPinEvent.builder()
+      .userId(command.getUserId())
+      .pin(command.getPin())
+      .build());
   }
 
   @CommandHandler
-  public void handleLockUserCommand(final LockUserCommand lockUserCommand) {
+  public void handleLockUserCommand(final LockUserCommand command) {
     if (!locked) {
-      AggregateLifecycle.apply(new UserLockedEvent(userId));
+      AggregateLifecycle.apply(UserLockedEvent.builder()
+        .userId(command.getUserId())
+        .build());
     }
   }
 
   @CommandHandler
-  public void handleLockUserCommand(final UnlockUserCommand unlockUserCommand) {
+  public void handleLockUserCommand(final UnlockUserCommand command) {
     if (locked) {
-      AggregateLifecycle.apply(new UserUnlockedEvent(userId));
+      AggregateLifecycle.apply(UserUnlockedEvent.builder()
+        .userId(command.getUserId())
+        .build());
     }
   }
 
   @CommandHandler
-  public boolean handleAuthorizeCommand(final AuthorizeCommand authorizeCommand) {
-    if (username.equals(authorizeCommand.getUsername()) &&
-      password.equals(authorizeCommand.getPassword()) &&
+  public boolean handleAuthorizeCommand(final AuthorizeCommand command) {
+    if (username.equals(command.getUsername()) &&
+      password.equals(command.getPassword()) &&
       !locked &&
       confirmed) {
-      AggregateLifecycle.apply(new UserAuthorizedEvent(userId));
+      AggregateLifecycle.apply(UserAuthorizedEvent.builder()
+        .userId(command.getUserId())
+        .build());
       return true;
     } else {
-      AggregateLifecycle.apply(new UserAuthorizationFailedEvent(userId, confirmed, locked));
+      AggregateLifecycle.apply(UserAuthorizationFailedEvent.builder()
+        .userId(command.getUserId())
+        .confirmed(confirmed)
+        .locked(locked)
+        .build());
       return false;
     }
   }

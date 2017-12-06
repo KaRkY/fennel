@@ -36,8 +36,12 @@ public class UserFailedAttemptLockingSaga {
     } else {
       if (attempts.size() == 5) {
         if (Duration.between(attempts.peekFirst(), time).toMinutes() < 5) {
-          commandGateway.send(new LockUserCommand(event.getUserId()));
-          lockedToken = eventScheduler.schedule(Duration.ofMinutes(5), new UserUnlockedEvent(event.getUserId()));
+          commandGateway.send(LockUserCommand.builder()
+            .userId(event.getUserId())
+            .build());
+          lockedToken = eventScheduler.schedule(Duration.ofMinutes(5), UserUnlockedEvent.builder()
+            .userId(event.getUserId())
+            .build());
         }
       }
     }

@@ -2,6 +2,7 @@ package org.fennel.api.users;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 public class UserId implements Serializable {
   private static final long serialVersionUID = -6581008675888933469L;
@@ -35,5 +36,9 @@ public class UserId implements Serializable {
 
   public static UserId of(final String identifier) {
     return new UserId(Objects.requireNonNull(identifier, "identifier"));
+  }
+
+  public static UserId randomUUID() {
+    return new UserId(UUID.randomUUID().toString());
   }
 }

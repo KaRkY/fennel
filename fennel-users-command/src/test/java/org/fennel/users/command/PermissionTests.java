@@ -19,7 +19,11 @@ public class PermissionTests {
   public void createPermission() throws Exception {
     fixture
       .given()
-      .when(new CreatePermissionCommand(PermissionName.of("READ_USERS")))
-      .expectEvents(new PermissionCreatedEvent(PermissionName.of("READ_USERS")));
+      .when(CreatePermissionCommand.builder()
+        .permissionName(PermissionName.of("READ_USERS"))
+        .build())
+      .expectEvents(PermissionCreatedEvent.builder()
+        .permissionName(PermissionName.of("READ_USERS"))
+        .build());
   }
 }

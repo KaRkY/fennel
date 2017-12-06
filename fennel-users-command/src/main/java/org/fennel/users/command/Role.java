@@ -31,20 +31,28 @@ public class Role implements Serializable {
 
   @CommandHandler
   public Role(final CreateRoleCommand command) {
-    AggregateLifecycle.apply(new RoleCreatedEvent(command.getRoleName()));
+    AggregateLifecycle.apply(RoleCreatedEvent.builder()
+      .roleName(command.getRoleName())
+      .build());
   }
 
   @CommandHandler
   public void handleAddPermissionCommand(final AddPermissionToRoleCommand command) {
     if (!permissions.contains(command.getPermissionName())) {
-      AggregateLifecycle.apply(new PermissionAddedToRoleEvent(command.getRoleName(), command.getPermissionName()));
+      AggregateLifecycle.apply(PermissionAddedToRoleEvent.builder()
+        .roleName(command.getRoleName())
+        .permissionName(command.getPermissionName())
+        .build());
     }
   }
 
   @CommandHandler
   public void handleRemovePermissionCommand(final RemovePermissionFromRoleCommand command) {
     if (permissions.contains(command.getPermissionName())) {
-      AggregateLifecycle.apply(new PermissionRemovedFromRoleEvent(command.getRoleName(), command.getPermissionName()));
+      AggregateLifecycle.apply(PermissionRemovedFromRoleEvent.builder()
+        .roleName(command.getRoleName())
+        .permissionName(command.getPermissionName())
+        .build());
     }
   }
 

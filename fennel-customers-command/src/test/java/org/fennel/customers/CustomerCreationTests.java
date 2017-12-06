@@ -20,7 +20,11 @@ public class CustomerCreationTests {
   public void testCreateCustomer() throws Exception {
     fixture
       .given()
-      .when(new CreateCustomerCommand(CustomerId.of("1234")))
-      .expectEvents(new CustomerCreatedEvent(CustomerId.of("1234")));
+      .when(CreateCustomerCommand.builder()
+        .customerId(CustomerId.of("1234"))
+        .build())
+      .expectEvents(CustomerCreatedEvent.builder()
+        .customerId(CustomerId.of("1234"))
+        .build());
   }
 }

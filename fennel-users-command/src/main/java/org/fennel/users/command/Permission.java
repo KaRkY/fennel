@@ -23,7 +23,9 @@ public class Permission implements Serializable {
 
   @CommandHandler
   public Permission(final CreatePermissionCommand command) {
-    AggregateLifecycle.apply(new PermissionCreatedEvent(command.getPermissionName()));
+    AggregateLifecycle.apply(PermissionCreatedEvent.builder()
+      .permissionName(command.getPermissionName())
+      .build());
   }
 
   @EventSourcingHandler

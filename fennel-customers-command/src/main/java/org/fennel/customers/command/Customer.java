@@ -23,7 +23,9 @@ public class Customer implements Serializable {
 
   @CommandHandler
   public Customer(final CreateCustomerCommand command) {
-    AggregateLifecycle.apply(new CustomerCreatedEvent(command.getCustomerId()));
+    AggregateLifecycle.apply(CustomerCreatedEvent.builder()
+      .customerId(command.getCustomerId())
+      .build());
   }
 
   @EventSourcingHandler

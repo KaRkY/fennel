@@ -5,28 +5,20 @@ import org.fennel.api.users.Password;
 import org.fennel.api.users.UserId;
 import org.fennel.api.users.Username;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.Value;
+
+@Value
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AuthorizeCommand {
 
   @TargetAggregateIdentifier
   private final UserId   userId;
   private final Username username;
   private final Password password;
-
-  public AuthorizeCommand(final UserId userId, final Username username, final Password password) {
-    this.userId = userId;
-    this.username = username;
-    this.password = password;
-  }
-
-  public UserId getUserId() {
-    return userId;
-  }
-
-  public Username getUsername() {
-    return username;
-  }
-
-  public Password getPassword() {
-    return password;
-  }
 }

@@ -6,7 +6,6 @@ import org.axonframework.test.saga.SagaTestFixture;
 import org.fennel.api.users.UserId;
 import org.fennel.api.users.commands.LockUserCommand;
 import org.fennel.api.users.events.UserAuthorizationFailedEvent;
-import org.fennel.api.users.events.UserAuthorizedEvent;
 import org.fennel.api.users.events.UserUnlockedEvent;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,31 +21,75 @@ public class UserFailedAttemptLockingSagaTests {
   @Test
   public void failLoginLock() throws Exception {
     fixture
-      .givenAPublished(new UserAuthorizationFailedEvent(UserId.of("1234"), true, false))
+      .givenAPublished(UserAuthorizationFailedEvent.builder()
+        .userId(UserId.of("1234"))
+        .confirmed(true)
+        .locked(false)
+        .build())
       .andThenTimeElapses(Duration.ofSeconds(30))
-      .andThenAPublished(new UserAuthorizationFailedEvent(UserId.of("1234"), true, false))
+      .andThenAPublished(UserAuthorizationFailedEvent.builder()
+        .userId(UserId.of("1234"))
+        .confirmed(true)
+        .locked(false)
+        .build())
       .andThenTimeElapses(Duration.ofSeconds(30))
-      .andThenAPublished(new UserAuthorizationFailedEvent(UserId.of("1234"), true, false))
+      .andThenAPublished(UserAuthorizationFailedEvent.builder()
+        .userId(UserId.of("1234"))
+        .confirmed(true)
+        .locked(false)
+        .build())
       .andThenTimeElapses(Duration.ofSeconds(30))
-      .andThenAPublished(new UserAuthorizationFailedEvent(UserId.of("1234"), true, false))
+      .andThenAPublished(UserAuthorizationFailedEvent.builder()
+        .userId(UserId.of("1234"))
+        .confirmed(true)
+        .locked(false)
+        .build())
       .andThenTimeElapses(Duration.ofSeconds(30))
-      .whenPublishingA(new UserAuthorizationFailedEvent(UserId.of("1234"), true, false))
-      .expectDispatchedCommands(new LockUserCommand(UserId.of("1234")))
-      .expectScheduledEvent(Duration.ofMinutes(5), new UserUnlockedEvent(UserId.of("1234")));
+      .whenPublishingA(UserAuthorizationFailedEvent.builder()
+        .userId(UserId.of("1234"))
+        .confirmed(true)
+        .locked(false)
+        .build())
+      .expectDispatchedCommands(LockUserCommand.builder()
+        .userId(UserId.of("1234"))
+        .build())
+      .expectScheduledEvent(Duration.ofMinutes(5), UserUnlockedEvent.builder()
+        .userId(UserId.of("1234"))
+        .build());
   }
 
   @Test
   public void failedLoginNotLocked() throws Exception {
     fixture
-      .givenAPublished(new UserAuthorizationFailedEvent(UserId.of("1234"), true, false))
+      .givenAPublished(UserAuthorizationFailedEvent.builder()
+        .userId(UserId.of("1234"))
+        .confirmed(true)
+        .locked(false)
+        .build())
       .andThenTimeElapses(Duration.ofMinutes(2))
-      .andThenAPublished(new UserAuthorizationFailedEvent(UserId.of("1234"), true, false))
+      .andThenAPublished(UserAuthorizationFailedEvent.builder()
+        .userId(UserId.of("1234"))
+        .confirmed(true)
+        .locked(false)
+        .build())
       .andThenTimeElapses(Duration.ofMinutes(2))
-      .andThenAPublished(new UserAuthorizationFailedEvent(UserId.of("1234"), true, false))
+      .andThenAPublished(UserAuthorizationFailedEvent.builder()
+        .userId(UserId.of("1234"))
+        .confirmed(true)
+        .locked(false)
+        .build())
       .andThenTimeElapses(Duration.ofMinutes(2))
-      .andThenAPublished(new UserAuthorizationFailedEvent(UserId.of("1234"), true, false))
+      .andThenAPublished(UserAuthorizationFailedEvent.builder()
+        .userId(UserId.of("1234"))
+        .confirmed(true)
+        .locked(false)
+        .build())
       .andThenTimeElapses(Duration.ofMinutes(2))
-      .whenPublishingA(new UserAuthorizationFailedEvent(UserId.of("1234"), true, false))
+      .whenPublishingA(UserAuthorizationFailedEvent.builder()
+        .userId(UserId.of("1234"))
+        .confirmed(true)
+        .locked(false)
+        .build())
       .expectNoDispatchedCommands()
       .expectNoScheduledEvents();
   }
@@ -54,15 +97,35 @@ public class UserFailedAttemptLockingSagaTests {
   @Test
   public void successLogin() throws Exception {
     fixture
-      .givenAPublished(new UserAuthorizationFailedEvent(UserId.of("1234"), true, false))
+      .givenAPublished(UserAuthorizationFailedEvent.builder()
+        .userId(UserId.of("1234"))
+        .confirmed(true)
+        .locked(false)
+        .build())
       .andThenTimeElapses(Duration.ofSeconds(30))
-      .andThenAPublished(new UserAuthorizationFailedEvent(UserId.of("1234"), true, false))
+      .andThenAPublished(UserAuthorizationFailedEvent.builder()
+        .userId(UserId.of("1234"))
+        .confirmed(true)
+        .locked(false)
+        .build())
       .andThenTimeElapses(Duration.ofSeconds(30))
-      .andThenAPublished(new UserAuthorizedEvent(UserId.of("1234")))
+      .andThenAPublished(UserAuthorizationFailedEvent.builder()
+        .userId(UserId.of("1234"))
+        .confirmed(true)
+        .locked(false)
+        .build())
       .andThenTimeElapses(Duration.ofSeconds(30))
-      .andThenAPublished(new UserAuthorizationFailedEvent(UserId.of("1234"), true, false))
+      .andThenAPublished(UserAuthorizationFailedEvent.builder()
+        .userId(UserId.of("1234"))
+        .confirmed(true)
+        .locked(false)
+        .build())
       .andThenTimeElapses(Duration.ofSeconds(30))
-      .whenPublishingA(new UserAuthorizationFailedEvent(UserId.of("1234"), true, false))
+      .whenPublishingA(UserAuthorizationFailedEvent.builder()
+        .userId(UserId.of("1234"))
+        .confirmed(true)
+        .locked(false)
+        .build())
       .expectNoDispatchedCommands()
       .expectNoScheduledEvents();
   }
