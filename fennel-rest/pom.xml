@@ -38,7 +38,19 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>fennel-command-api</artifactId>
+      <artifactId>fennel-users-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>fennel-tasks-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>fennel-customers-api</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -46,24 +58,28 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>fennel-users-command</artifactId>
       <version>${project.version}</version>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>fennel-users-query</artifactId>
       <version>${project.version}</version>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>fennel-tasks-command</artifactId>
       <version>${project.version}</version>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>fennel-customers-command</artifactId>
       <version>${project.version}</version>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>

@@ -1,9 +1,9 @@
 package org.fennel.tasks.command;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
-import org.fennel.api.tasks.TaskId;
-import org.fennel.api.tasks.commands.CreateTaskCommand;
-import org.fennel.api.tasks.events.TaskCreatedEvent;
+import org.fennel.tasks.api.TaskId;
+import org.fennel.tasks.api.commands.CreateTaskCommand;
+import org.fennel.tasks.api.events.TaskCreatedEvent;
 import org.junit.Before;
 import org.junit.Test;
 

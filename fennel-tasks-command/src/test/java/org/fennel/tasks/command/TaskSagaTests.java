@@ -3,10 +3,10 @@ package org.fennel.tasks.command;
 import java.time.Duration;
 
 import org.axonframework.test.saga.SagaTestFixture;
-import org.fennel.api.tasks.TaskId;
-import org.fennel.api.tasks.events.TaskCompletedEvent;
-import org.fennel.api.tasks.events.TaskCreatedEvent;
-import org.fennel.api.tasks.events.TaskEscalationEvent;
+import org.fennel.tasks.api.TaskId;
+import org.fennel.tasks.api.events.TaskCompletedEvent;
+import org.fennel.tasks.api.events.TaskCreatedEvent;
+import org.fennel.tasks.api.events.TaskEscalationEvent;
 import org.junit.Before;
 import org.junit.Test;
 

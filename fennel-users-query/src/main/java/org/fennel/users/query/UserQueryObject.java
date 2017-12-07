@@ -1,7 +1,7 @@
 package org.fennel.users.query;
 
-import org.fennel.api.users.UserId;
-import org.fennel.api.users.Username;
+import org.fennel.users.api.UserId;
+import org.fennel.users.api.Username;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,8 +15,9 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserQueryObject {
 
-  private UserId userId;
-  private String displayName;
+  private UserId   userId;
+  private String   displayName;
   private Username username;
-  private boolean locked;
+  private boolean  confirmed;
+  private boolean  locked;
 }

@@ -8,9 +8,9 @@ import org.axonframework.eventhandling.saga.StartSaga;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
 import org.axonframework.eventhandling.scheduling.ScheduleToken;
 import org.axonframework.spring.stereotype.Saga;
-import org.fennel.api.tasks.events.TaskCompletedEvent;
-import org.fennel.api.tasks.events.TaskCreatedEvent;
-import org.fennel.api.tasks.events.TaskEscalationEvent;
+import org.fennel.tasks.api.events.TaskCompletedEvent;
+import org.fennel.tasks.api.events.TaskCreatedEvent;
+import org.fennel.tasks.api.events.TaskEscalationEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Saga
@@ -25,10 +25,10 @@ public class TaskSaga {
   @SagaEventHandler(associationProperty = "taskId")
   public void handle(final TaskCreatedEvent event) {
     escalationToken = eventScheduler.schedule(
-        Duration.ofDays(5),
-        TaskEscalationEvent.builder()
-            .taskId(event.getTaskId())
-            .build());
+      Duration.ofDays(5),
+      TaskEscalationEvent.builder()
+        .taskId(event.getTaskId())
+        .build());
   }
 
   @SagaEventHandler(associationProperty = "taskId")

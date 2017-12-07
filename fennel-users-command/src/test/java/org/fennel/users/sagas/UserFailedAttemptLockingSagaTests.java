@@ -3,11 +3,11 @@ package org.fennel.users.sagas;
 import java.time.Duration;
 
 import org.axonframework.test.saga.SagaTestFixture;
-import org.fennel.api.users.UserId;
-import org.fennel.api.users.commands.LockUserCommand;
-import org.fennel.api.users.events.UserAuthorizationFailedEvent;
-import org.fennel.api.users.events.UserAuthorizedEvent;
-import org.fennel.api.users.events.UserUnlockedEvent;
+import org.fennel.users.api.UserId;
+import org.fennel.users.api.commands.LockUserCommand;
+import org.fennel.users.api.events.UserAuthorizationFailedEvent;
+import org.fennel.users.api.events.UserAuthorizedEvent;
+import org.fennel.users.api.events.UserUnlockedEvent;
 import org.junit.Before;
 import org.junit.Test;
 

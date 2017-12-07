@@ -7,16 +7,15 @@ import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.commandhandling.model.AggregateLifecycle;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
-import org.fennel.api.tasks.TaskId;
-import org.fennel.api.tasks.commands.CreateTaskCommand;
-import org.fennel.api.tasks.events.TaskCreatedEvent;
+import org.fennel.tasks.api.commands.CreateTaskCommand;
+import org.fennel.tasks.api.events.TaskCreatedEvent;
 
 @Aggregate
 public class Task implements Serializable {
   private static final long serialVersionUID = 8562075175602085255L;
 
   @AggregateIdentifier
-  private TaskId taskId;
+  private String taskId;
 
   public Task() {
   }
@@ -24,12 +23,12 @@ public class Task implements Serializable {
   @CommandHandler
   public Task(final CreateTaskCommand command) {
     AggregateLifecycle.apply(TaskCreatedEvent.builder()
-        .taskId(command.getTaskId())
-        .build());
+      .taskId(command.getTaskId())
+      .build());
   }
 
   @EventSourcingHandler
   public void onTaskCreatedEvent(final TaskCreatedEvent event) {
-    taskId = event.getTaskId();
+    taskId = event.getTaskId().getValue();
   }
 }

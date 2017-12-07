@@ -1,18 +1,18 @@
 package org.fennel.users.command;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
-import org.fennel.api.users.Password;
-import org.fennel.api.users.UserId;
-import org.fennel.api.users.UserPin;
-import org.fennel.api.users.Username;
-import org.fennel.api.users.commands.ConfirmUserCommand;
-import org.fennel.api.users.commands.CreateUserCommand;
-import org.fennel.api.users.commands.NewUserPinCommand;
-import org.fennel.api.users.events.NewUserPinEvent;
-import org.fennel.api.users.events.UserConfirmationRequestedEvent;
-import org.fennel.api.users.events.UserConfirmedEvent;
-import org.fennel.api.users.events.UserCreatedEvent;
-import org.fennel.api.users.events.UserCreationRequestedEvent;
+import org.fennel.users.api.Password;
+import org.fennel.users.api.UserId;
+import org.fennel.users.api.UserPin;
+import org.fennel.users.api.Username;
+import org.fennel.users.api.commands.ConfirmUserCommand;
+import org.fennel.users.api.commands.CreateUserCommand;
+import org.fennel.users.api.commands.NewUserPinCommand;
+import org.fennel.users.api.events.ConfirmUserEvent;
+import org.fennel.users.api.events.NewUserPinEvent;
+import org.fennel.users.api.events.UserConfirmedEvent;
+import org.fennel.users.api.events.UserCreatedEvent;
+import org.fennel.users.commands.User;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,12 +35,14 @@ public class UserCreationTests {
         .password(Password.of("1234"))
         .pin(UserPin.of("1234567890"))
         .build())
-      .expectEvents(UserCreationRequestedEvent.builder()
+      .expectEvents(UserCreatedEvent.builder()
         .userId(UserId.of("1234"))
         .displayName("User 1")
         .username(Username.of("user1@gmail.com"))
         .password(Password.of("1234"))
         .pin(UserPin.of("1234567890"))
+        .confirmed(false)
+        .locked(false)
         .build());
   }
 
@@ -48,30 +50,26 @@ public class UserCreationTests {
   public void userConfirm() throws Exception {
     fixture
       .given(
-        UserCreationRequestedEvent.builder()
+        UserCreatedEvent.builder()
           .userId(UserId.of("1234"))
           .displayName("User 1")
           .username(Username.of("user1@gmail.com"))
           .password(Password.of("1234"))
           .pin(UserPin.of("1234567890"))
+          .confirmed(false)
+          .locked(false)
           .build())
       .when(ConfirmUserCommand.builder()
         .userId(UserId.of("1234"))
         .pin(UserPin.of("1234567890"))
         .build())
       .expectEvents(
-        UserConfirmationRequestedEvent.builder()
+        ConfirmUserEvent.builder()
           .userId(UserId.of("1234"))
           .pin(UserPin.of("1234567890"))
           .build(),
         UserConfirmedEvent.builder()
           .userId(UserId.of("1234"))
-          .build(),
-        UserCreatedEvent.builder()
-          .userId(UserId.of("1234"))
-          .displayName("User 1")
-          .username(Username.of("user1@gmail.com"))
-          .password(Password.of("1234"))
           .build())
       .expectReturnValue(true);
   }
@@ -80,18 +78,20 @@ public class UserCreationTests {
   public void userConfirmFalsePin() throws Exception {
     fixture
       .given(
-        UserCreationRequestedEvent.builder()
+        UserCreatedEvent.builder()
           .userId(UserId.of("1234"))
           .displayName("User 1")
           .username(Username.of("user1@gmail.com"))
           .password(Password.of("1234"))
           .pin(UserPin.of("1234567890"))
+          .confirmed(false)
+          .locked(false)
           .build())
       .when(ConfirmUserCommand.builder()
         .userId(UserId.of("1234"))
         .pin(UserPin.of("1234567891"))
         .build())
-      .expectEvents(UserConfirmationRequestedEvent.builder()
+      .expectEvents(ConfirmUserEvent.builder()
         .userId(UserId.of("1234"))
         .pin(UserPin.of("1234567891"))
         .build())
@@ -102,12 +102,14 @@ public class UserCreationTests {
   public void userNewPinRequest() throws Exception {
     fixture
       .given(
-        UserCreationRequestedEvent.builder()
+        UserCreatedEvent.builder()
           .userId(UserId.of("1234"))
           .displayName("User 1")
           .username(Username.of("user1@gmail.com"))
           .password(Password.of("1234"))
           .pin(UserPin.of("1234567890"))
+          .confirmed(false)
+          .locked(false)
           .build())
       .when(NewUserPinCommand.builder()
         .userId(UserId.of("1234"))
@@ -123,12 +125,14 @@ public class UserCreationTests {
   public void userPinRequestedConfirm() throws Exception {
     fixture
       .given(
-        UserCreationRequestedEvent.builder()
+        UserCreatedEvent.builder()
           .userId(UserId.of("1234"))
           .displayName("User 1")
           .username(Username.of("user1@gmail.com"))
           .password(Password.of("1234"))
           .pin(UserPin.of("1234567890"))
+          .confirmed(false)
+          .locked(false)
           .build(),
         NewUserPinEvent.builder()
           .userId(UserId.of("1234"))
@@ -139,18 +143,12 @@ public class UserCreationTests {
         .pin(UserPin.of("1234567891"))
         .build())
       .expectEvents(
-        UserConfirmationRequestedEvent.builder()
+        ConfirmUserEvent.builder()
           .userId(UserId.of("1234"))
           .pin(UserPin.of("1234567891"))
           .build(),
         UserConfirmedEvent.builder()
           .userId(UserId.of("1234"))
-          .build(),
-        UserCreatedEvent.builder()
-          .userId(UserId.of("1234"))
-          .displayName("User 1")
-          .username(Username.of("user1@gmail.com"))
-          .password(Password.of("1234"))
           .build())
       .expectReturnValue(true);
   }
@@ -159,12 +157,14 @@ public class UserCreationTests {
   public void userPinRequestedConfirmWithOldPin() throws Exception {
     fixture
       .given(
-        UserCreationRequestedEvent.builder()
+        UserCreatedEvent.builder()
           .userId(UserId.of("1234"))
           .displayName("User 1")
           .username(Username.of("user1@gmail.com"))
           .password(Password.of("1234"))
           .pin(UserPin.of("1234567890"))
+          .confirmed(false)
+          .locked(false)
           .build(),
         NewUserPinEvent.builder()
           .userId(UserId.of("1234"))
@@ -174,7 +174,7 @@ public class UserCreationTests {
         .userId(UserId.of("1234"))
         .pin(UserPin.of("1234567890"))
         .build())
-      .expectEvents(UserConfirmationRequestedEvent.builder()
+      .expectEvents(ConfirmUserEvent.builder()
         .userId(UserId.of("1234"))
         .pin(UserPin.of("1234567890"))
         .build())

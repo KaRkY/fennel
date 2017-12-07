@@ -13,5 +13,6 @@ import lombok.Value;
 public class CreateUserResponse {
 
   private String userId;
+  private String pin;
 
 }

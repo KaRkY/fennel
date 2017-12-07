@@ -1,11 +1,11 @@
 package org.fennel.config;
 
-import org.fennel.api.users.Password;
-import org.fennel.api.users.UserId;
-import org.fennel.api.users.UserPin;
-import org.fennel.api.users.Username;
 import org.fennel.jackson.LambdaValueTypeDeserializer;
 import org.fennel.jackson.LambdaValueTypeSerializer;
+import org.fennel.users.api.Password;
+import org.fennel.users.api.UserId;
+import org.fennel.users.api.UserPin;
+import org.fennel.users.api.Username;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

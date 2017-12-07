@@ -33,7 +33,7 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>fennel-command-api</artifactId>
+      <artifactId>fennel-tasks-api</artifactId>
       <version>${project.version}</version>
     </dependency>
 

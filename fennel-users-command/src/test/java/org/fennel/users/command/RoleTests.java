@@ -1,14 +1,15 @@
 package org.fennel.users.command;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
-import org.fennel.api.users.PermissionName;
-import org.fennel.api.users.RoleName;
-import org.fennel.api.users.commands.AddPermissionToRoleCommand;
-import org.fennel.api.users.commands.CreateRoleCommand;
-import org.fennel.api.users.commands.RemovePermissionFromRoleCommand;
-import org.fennel.api.users.events.PermissionAddedToRoleEvent;
-import org.fennel.api.users.events.PermissionRemovedFromRoleEvent;
-import org.fennel.api.users.events.RoleCreatedEvent;
+import org.fennel.users.api.PermissionName;
+import org.fennel.users.api.RoleName;
+import org.fennel.users.api.commands.AddPermissionToRoleCommand;
+import org.fennel.users.api.commands.CreateRoleCommand;
+import org.fennel.users.api.commands.RemovePermissionFromRoleCommand;
+import org.fennel.users.api.events.PermissionAddedToRoleEvent;
+import org.fennel.users.api.events.PermissionRemovedFromRoleEvent;
+import org.fennel.users.api.events.RoleCreatedEvent;
+import org.fennel.users.commands.Role;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,9 +27,11 @@ public class RoleTests {
       .given()
       .when(CreateRoleCommand.builder()
         .roleName(RoleName.of("root"))
+        .description("description")
         .build())
       .expectEvents(RoleCreatedEvent.builder()
         .roleName(RoleName.of("root"))
+        .description("description")
         .build());
   }
 
@@ -37,6 +40,7 @@ public class RoleTests {
     fixture
       .given(RoleCreatedEvent.builder()
         .roleName(RoleName.of("root"))
+        .description("description")
         .build())
       .when(AddPermissionToRoleCommand.builder()
         .roleName(RoleName.of("root"))
@@ -54,6 +58,7 @@ public class RoleTests {
       .given(
         RoleCreatedEvent.builder()
           .roleName(RoleName.of("root"))
+          .description("description")
           .build(),
         PermissionAddedToRoleEvent.builder()
           .roleName(RoleName.of("root"))
@@ -72,6 +77,7 @@ public class RoleTests {
       .given(
         RoleCreatedEvent.builder()
           .roleName(RoleName.of("root"))
+          .description("description")
           .build(),
         PermissionAddedToRoleEvent.builder()
           .roleName(RoleName.of("root"))
@@ -92,6 +98,7 @@ public class RoleTests {
     fixture
       .given(RoleCreatedEvent.builder()
         .roleName(RoleName.of("root"))
+        .description("description")
         .build())
       .when(RemovePermissionFromRoleCommand.builder()
         .roleName(RoleName.of("root"))

@@ -1,19 +1,23 @@
 package org.fennel.users.command;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
-import org.fennel.api.users.GroupName;
-import org.fennel.api.users.PermissionName;
-import org.fennel.api.users.RoleName;
-import org.fennel.api.users.commands.AddPermissionToGroupCommand;
-import org.fennel.api.users.commands.AddRoleToGroupCommand;
-import org.fennel.api.users.commands.CreateGroupCommand;
-import org.fennel.api.users.commands.RemovePermissionFromGroupCommand;
-import org.fennel.api.users.commands.RemoveRoleFromGroupCommand;
-import org.fennel.api.users.events.GroupCreatedEvent;
-import org.fennel.api.users.events.PermissionAddedToGroupEvent;
-import org.fennel.api.users.events.PermissionRemovedFromGroupEvent;
-import org.fennel.api.users.events.RoleAddedToGroupEvent;
-import org.fennel.api.users.events.RoleRemovedFromGroupEvent;
+import org.fennel.users.api.GroupName;
+import org.fennel.users.api.PermissionName;
+import org.fennel.users.api.RoleName;
+import org.fennel.users.api.UserId;
+import org.fennel.users.api.commands.AddPermissionToGroupCommand;
+import org.fennel.users.api.commands.AddRoleToGroupCommand;
+import org.fennel.users.api.commands.AddUserToGroupCommand;
+import org.fennel.users.api.commands.CreateGroupCommand;
+import org.fennel.users.api.commands.RemovePermissionFromGroupCommand;
+import org.fennel.users.api.commands.RemoveRoleFromGroupCommand;
+import org.fennel.users.api.events.GroupCreatedEvent;
+import org.fennel.users.api.events.PermissionAddedToGroupEvent;
+import org.fennel.users.api.events.PermissionRemovedFromGroupEvent;
+import org.fennel.users.api.events.RoleAddedToGroupEvent;
+import org.fennel.users.api.events.RoleRemovedFromGroupEvent;
+import org.fennel.users.api.events.UserAddedToGroupEvent;
+import org.fennel.users.commands.Group;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,9 +35,11 @@ public class GroupTests {
       .given()
       .when(CreateGroupCommand.builder()
         .groupName(GroupName.of("root"))
+        .description("description")
         .build())
       .expectEvents(GroupCreatedEvent.builder()
         .groupName(GroupName.of("root"))
+        .description("description")
         .build());
   }
 
@@ -42,6 +48,7 @@ public class GroupTests {
     fixture
       .given(GroupCreatedEvent.builder()
         .groupName(GroupName.of("root"))
+        .description("description")
         .build())
       .when(AddRoleToGroupCommand.builder()
         .groupName(GroupName.of("root"))
@@ -59,6 +66,7 @@ public class GroupTests {
       .given(
         GroupCreatedEvent.builder()
           .groupName(GroupName.of("root"))
+          .description("description")
           .build(),
         RoleAddedToGroupEvent.builder()
           .groupName(GroupName.of("root"))
@@ -77,6 +85,7 @@ public class GroupTests {
       .given(
         GroupCreatedEvent.builder()
           .groupName(GroupName.of("root"))
+          .description("description")
           .build(),
         RoleAddedToGroupEvent.builder()
           .groupName(GroupName.of("root"))
@@ -97,6 +106,7 @@ public class GroupTests {
     fixture
       .given(GroupCreatedEvent.builder()
         .groupName(GroupName.of("root"))
+        .description("description")
         .build())
       .when(RemoveRoleFromGroupCommand.builder()
         .groupName(GroupName.of("root"))
@@ -110,6 +120,7 @@ public class GroupTests {
     fixture
       .given(GroupCreatedEvent.builder()
         .groupName(GroupName.of("root"))
+        .description("description")
         .build())
       .when(AddPermissionToGroupCommand.builder()
         .groupName(GroupName.of("root"))
@@ -127,6 +138,7 @@ public class GroupTests {
       .given(
         GroupCreatedEvent.builder()
           .groupName(GroupName.of("root"))
+          .description("description")
           .build(),
         PermissionAddedToGroupEvent.builder()
           .groupName(GroupName.of("root"))
@@ -145,6 +157,7 @@ public class GroupTests {
       .given(
         GroupCreatedEvent.builder()
           .groupName(GroupName.of("root"))
+          .description("description")
           .build(),
         PermissionAddedToGroupEvent.builder()
           .groupName(GroupName.of("root"))
@@ -165,11 +178,29 @@ public class GroupTests {
     fixture
       .given(GroupCreatedEvent.builder()
         .groupName(GroupName.of("root"))
+        .description("description")
         .build())
       .when(RemovePermissionFromGroupCommand.builder()
         .groupName(GroupName.of("root"))
         .permissionName(PermissionName.of("root"))
         .build())
       .expectEvents();
+  }
+
+  @Test
+  public void addUserToGroup() throws Exception {
+    fixture
+      .given(GroupCreatedEvent.builder()
+        .groupName(GroupName.of("root"))
+        .description("description")
+        .build())
+      .when(AddUserToGroupCommand.builder()
+        .groupName(GroupName.of("root"))
+        .userId(UserId.of("1234"))
+        .build())
+      .expectEvents(UserAddedToGroupEvent.builder()
+        .groupName(GroupName.of("root"))
+        .userId(UserId.of("1234"))
+        .build());
   }
 }

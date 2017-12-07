@@ -1,11 +1,9 @@
 package org.fennel.config;
 
 import java.sql.SQLException;
-import java.time.Duration;
 
 import javax.sql.DataSource;
 
-import org.axonframework.boot.EventProcessorProperties;
 import org.axonframework.common.jdbc.ConnectionProvider;
 import org.axonframework.common.transaction.TransactionManager;
 import org.axonframework.eventhandling.saga.repository.SagaStore;
@@ -33,15 +31,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AxonConfig {
 
   @Bean
-  public String test(final EventProcessorProperties eventHandlingConfiguration) {
-    System.out.println(eventHandlingConfiguration.getProcessors());
-    eventHandlingConfiguration.getProcessors().forEach((k, v) -> {
-      System.out.println(k);
-    });
-    return "";
-  }
-
-  @Bean
   public JacksonSerializer serializer(final ObjectMapper objectMapper) {
     return new JacksonSerializer(objectMapper);
   }
@@ -56,14 +45,12 @@ public class AxonConfig {
     final Serializer serializer,
     final ConnectionProvider connectionProvider,
     final TransactionManager transactionManager) {
-    final JdbcEventStorageEngine jdbcEventStorageEngine = new JdbcEventStorageEngine(
+    return new JdbcEventStorageEngine(
       serializer,
       null,
       null,
       connectionProvider,
       transactionManager);
-    jdbcEventStorageEngine.createSchema(eventSchemaFactory());
-    return jdbcEventStorageEngine;
   }
 
   @Bean
@@ -85,9 +72,7 @@ public class AxonConfig {
   public SagaStore<Object> sagaRepository(
     final Serializer serializer,
     final SpringDataSourceConnectionProvider dataSource) throws SQLException {
-    final JdbcSagaStore jdbcSagaStore = new JdbcSagaStore(dataSource, sagaSqlSchema(), serializer);
-    //jdbcSagaStore.createSchema();
-    return jdbcSagaStore;
+    return new JdbcSagaStore(dataSource, sagaSqlSchema(), serializer);
   }
 
   @Bean
@@ -104,11 +89,6 @@ public class AxonConfig {
   public TokenStore tokenStore(
     final Serializer serializer,
     final SpringDataSourceConnectionProvider dataSource) {
-    final JdbcTokenStore jdbcTokenStore = new JdbcTokenStore(dataSource, serializer, tokenSchema(),
-      Duration.ofSeconds(10), "test", byte[].class);
-
-    jdbcTokenStore.createSchema(tokenSchemaFactory());
-
-    return jdbcTokenStore;
+    return new JdbcTokenStore(dataSource, serializer);
   }
 }

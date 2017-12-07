@@ -1,9 +1,9 @@
 package org.fennel.customers;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
-import org.fennel.api.customers.CustomerId;
-import org.fennel.api.customers.commands.CreateCustomerCommand;
-import org.fennel.api.customers.events.CustomerCreatedEvent;
+import org.fennel.customers.api.CustomerId;
+import org.fennel.customers.api.commands.CreateCustomerCommand;
+import org.fennel.customers.api.events.CustomerCreatedEvent;
 import org.fennel.customers.command.Customer;
 import org.junit.Before;
 import org.junit.Test;

@@ -22,9 +22,9 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
 
-    <database.url>jdbc:postgresql://localhost:5439/postgres</database.url>
+    <database.url>jdbc:postgresql://localhost:5432/postgres</database.url>
     <database.user>postgres</database.user>
-    <database.password>postgres</database.password>
+    <database.password>developer</database.password>
 
     <jooq.version>3.10.1</jooq.version>
     <jackson.version>2.9.2</jackson.version>
@@ -150,5 +150,8 @@
     <module>fennel-customers-command</module>
     <module>fennel-tasks-command</module>
     <module>fennel-rest</module>
+    <module>fennel-users-api</module>
+    <module>fennel-customers-api</module>
+    <module>fennel-tasks-api</module>
   </modules>
 </project>
