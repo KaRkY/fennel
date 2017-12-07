@@ -11,12 +11,14 @@ import org.axonframework.eventhandling.saga.SagaEventHandler;
 import org.axonframework.eventhandling.saga.StartSaga;
 import org.axonframework.eventhandling.scheduling.EventScheduler;
 import org.axonframework.eventhandling.scheduling.ScheduleToken;
+import org.axonframework.spring.stereotype.Saga;
 import org.fennel.api.users.commands.LockUserCommand;
 import org.fennel.api.users.events.UserAuthorizationFailedEvent;
 import org.fennel.api.users.events.UserAuthorizedEvent;
 import org.fennel.api.users.events.UserUnlockedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@Saga
 public class UserFailedAttemptLockingSaga {
 
   @Autowired

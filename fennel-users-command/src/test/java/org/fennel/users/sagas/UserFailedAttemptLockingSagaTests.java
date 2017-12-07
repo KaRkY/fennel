@@ -6,6 +6,7 @@ import org.axonframework.test.saga.SagaTestFixture;
 import org.fennel.api.users.UserId;
 import org.fennel.api.users.commands.LockUserCommand;
 import org.fennel.api.users.events.UserAuthorizationFailedEvent;
+import org.fennel.api.users.events.UserAuthorizedEvent;
 import org.fennel.api.users.events.UserUnlockedEvent;
 import org.junit.Before;
 import org.junit.Test;
@@ -121,10 +122,8 @@ public class UserFailedAttemptLockingSagaTests {
         .locked(false)
         .build())
       .andThenTimeElapses(Duration.ofSeconds(30))
-      .whenPublishingA(UserAuthorizationFailedEvent.builder()
+      .whenPublishingA(UserAuthorizedEvent.builder()
         .userId(UserId.of("1234"))
-        .confirmed(true)
-        .locked(false)
         .build())
       .expectNoDispatchedCommands()
       .expectNoScheduledEvents();

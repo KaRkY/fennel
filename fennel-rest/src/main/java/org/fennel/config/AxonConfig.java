@@ -86,7 +86,7 @@ public class AxonConfig {
     final Serializer serializer,
     final SpringDataSourceConnectionProvider dataSource) throws SQLException {
     final JdbcSagaStore jdbcSagaStore = new JdbcSagaStore(dataSource, sagaSqlSchema(), serializer);
-    // jdbcSagaStore.createSchema();
+    //jdbcSagaStore.createSchema();
     return jdbcSagaStore;
   }
 

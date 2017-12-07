@@ -23,7 +23,9 @@ public class Task implements Serializable {
 
   @CommandHandler
   public Task(final CreateTaskCommand command) {
-    AggregateLifecycle.apply(new TaskCreatedEvent(command.getTaskId()));
+    AggregateLifecycle.apply(TaskCreatedEvent.builder()
+        .taskId(command.getTaskId())
+        .build());
   }
 
   @EventSourcingHandler

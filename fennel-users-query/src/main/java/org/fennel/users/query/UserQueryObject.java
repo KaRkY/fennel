@@ -2,16 +2,21 @@ package org.fennel.users.query;
 
 import org.fennel.api.users.UserId;
 import org.fennel.api.users.Username;
-import org.immutables.value.Value;
 
-@Value.Immutable
-public interface UserQueryObject {
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.Value;
 
-  UserId userId();
+@Value
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class UserQueryObject {
 
-  String displayName();
-
-  Username username();
-
-  boolean locked();
+  private UserId userId;
+  private String displayName;
+  private Username username;
+  private boolean locked;
 }

@@ -3,6 +3,7 @@
  - Group unlocking
  - Simple query model
  - Simple management GUI
+ - User confirmation Saga
 
 --- Customers ---
  - Define which data is needed for customer(VAT number, Name, etc.)

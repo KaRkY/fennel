@@ -141,7 +141,7 @@ public class UserCreationTests {
       .expectEvents(
         UserConfirmationRequestedEvent.builder()
           .userId(UserId.of("1234"))
-          .pin(UserPin.of("1234567890"))
+          .pin(UserPin.of("1234567891"))
           .build(),
         UserConfirmedEvent.builder()
           .userId(UserId.of("1234"))

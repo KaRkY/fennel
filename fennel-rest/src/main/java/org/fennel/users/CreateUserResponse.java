@@ -1,14 +1,17 @@
 package org.fennel.users;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.Value;
+
+@Value
+@Builder
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateUserResponse {
+
   private String userId;
-
-  public String getUserId() {
-    return userId;
-  }
-
-  public void setUserId(final String userId) {
-    this.userId = userId;
-  }
 
 }

@@ -22,16 +22,24 @@ public class TaskSagaTests {
   public void createTask() throws Exception {
     fixture
       .givenNoPriorActivity()
-      .whenPublishingA(new TaskCreatedEvent(TaskId.of("1234")))
-      .expectScheduledEvent(Duration.ofDays(5), new TaskEscalationEvent(TaskId.of("1234")));
+      .whenPublishingA(TaskCreatedEvent.builder()
+          .taskId(TaskId.of("1234"))
+          .build())
+      .expectScheduledEvent(Duration.ofDays(5), TaskEscalationEvent.builder()
+          .taskId(TaskId.of("1234"))
+          .build());
   }
 
   @Test
   public void completeTaskInTime() throws Exception {
     fixture
-      .givenAPublished(new TaskCreatedEvent(TaskId.of("1234")))
+      .givenAPublished(TaskCreatedEvent.builder()
+          .taskId(TaskId.of("1234"))
+          .build())
       .andThenTimeElapses(Duration.ofDays(2))
-      .whenPublishingA(new TaskCompletedEvent(TaskId.of("1234")))
+      .whenPublishingA(TaskCompletedEvent.builder()
+          .taskId(TaskId.of("1234"))
+          .build())
       .expectNoScheduledEvents();
   }
 }

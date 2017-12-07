@@ -18,8 +18,12 @@ public class TaskTests {
   @Test
   public void createTask() throws Exception {
     fixture
-      .given()
-      .when(new CreateTaskCommand(TaskId.of("1234")))
-      .expectEvents(new TaskCreatedEvent(TaskId.of("1234")));
+        .given()
+        .when(CreateTaskCommand.builder()
+            .taskId(TaskId.of("1234"))
+            .build())
+        .expectEvents(TaskCreatedEvent.builder()
+            .taskId(TaskId.of("1234"))
+            .build());
   }
 }

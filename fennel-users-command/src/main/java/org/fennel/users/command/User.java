@@ -71,7 +71,9 @@ public class User implements Serializable {
         .password(password)
         .build());
       return true;
-    } else return pin == null;
+    } else {
+      return pin == null;
+    }
   }
 
   @CommandHandler

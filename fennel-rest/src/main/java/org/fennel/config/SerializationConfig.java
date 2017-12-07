@@ -18,16 +18,16 @@ public class SerializationConfig {
   @Bean
   public Module customModule() {
     final SimpleModule module = new SimpleModule();
-    module.addSerializer(UserId.class, new LambdaValueTypeSerializer<>(UserId::toString));
+    module.addSerializer(UserId.class, new LambdaValueTypeSerializer<>(UserId::getValue));
     module.addDeserializer(UserId.class, new LambdaValueTypeDeserializer<>(UserId::of));
 
-    module.addSerializer(Username.class, new LambdaValueTypeSerializer<>(Username::toString));
+    module.addSerializer(Username.class, new LambdaValueTypeSerializer<>(Username::getValue));
     module.addDeserializer(Username.class, new LambdaValueTypeDeserializer<>(Username::of));
 
-    module.addSerializer(Password.class, new LambdaValueTypeSerializer<>(Password::toString));
+    module.addSerializer(Password.class, new LambdaValueTypeSerializer<>(Password::getValue));
     module.addDeserializer(Password.class, new LambdaValueTypeDeserializer<>(Password::of));
 
-    module.addSerializer(UserPin.class, new LambdaValueTypeSerializer<>(UserPin::toString));
+    module.addSerializer(UserPin.class, new LambdaValueTypeSerializer<>(UserPin::getValue));
     module.addDeserializer(UserPin.class, new LambdaValueTypeDeserializer<>(UserPin::of));
     return module;
   }

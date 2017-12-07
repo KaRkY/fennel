@@ -26,16 +26,15 @@ public class UsersController {
   @PostMapping
   public CompletableFuture<CreateUserResponse> createUser(@RequestBody final CreateUserRequest createUserRequest) {
     final UserId userId = UserId.randomUUID();
-    return commandGateway.send(new CreateUserCommand(
-      UserId.randomUUID(),
-      createUserRequest.getDisplayName(),
-      Username.of(createUserRequest.getUsername()),
-      Password.of(createUserRequest.getPassword()),
-      UserPin.random(8)))
-      .thenApply(r -> {
-        final CreateUserResponse response = new CreateUserResponse();
-        response.setUserId(userId.toString());
-        return response;
-      });
+    return commandGateway.send(CreateUserCommand.builder()
+        .userId(userId)
+        .displayName(createUserRequest.getDisplayName())
+        .username(Username.of(createUserRequest.getUsername()))
+        .password(Password.of(createUserRequest.getPassword()))
+        .pin(UserPin.random(8))
+        .build())
+        .thenApply(r -> CreateUserResponse.builder()
+            .userId(userId.toString())
+            .build());
   }
 }

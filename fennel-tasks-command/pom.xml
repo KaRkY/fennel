@@ -12,6 +12,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.axonframework</groupId>
       <artifactId>axon-core</artifactId>
     </dependency>
@@ -28,7 +33,7 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>fennel-api</artifactId>
+      <artifactId>fennel-command-api</artifactId>
       <version>${project.version}</version>
     </dependency>
 
