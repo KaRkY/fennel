@@ -29,6 +29,6 @@ public class Task implements Serializable {
 
   @EventSourcingHandler
   public void onTaskCreatedEvent(final TaskCreatedEvent event) {
-    taskId = event.getTaskId().getValue();
+    taskId = event.getTaskId();
   }
 }

@@ -4,7 +4,7 @@
  - Simple query model
  - Simple management GUI
  - User confirmation Saga
- - Change Id classes to raw types, with builders there is no need for them
+ - UserCreationProcess as AR.
 
 --- Customers ---
  - Define which data is needed for customer(VAT number, Name, etc.)

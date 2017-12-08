@@ -1,7 +1,6 @@
 package org.fennel.customers.api.commands;
 
 import org.axonframework.commandhandling.TargetAggregateIdentifier;
-import org.fennel.customers.api.CustomerId;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,10 +14,7 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateCustomerCommand {
 
-  private final CustomerId customerId;
-
   @TargetAggregateIdentifier
-  public String getTargetAggregateIdentifier() {
-    return customerId.getValue();
-  }
+  private final String customerId;
+
 }

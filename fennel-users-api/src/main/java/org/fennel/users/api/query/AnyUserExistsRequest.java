@@ -1,5 +1,8 @@
 package org.fennel.users.api.query;
 
-public class AnyUserExistsRequest {
+import lombok.Builder;
+import lombok.Value;
+
+final @Value @Builder public class AnyUserExistsRequest {
 
 }

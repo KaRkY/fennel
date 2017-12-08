@@ -1,7 +1,6 @@
 package org.fennel.users.command;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
-import org.fennel.users.api.PermissionName;
 import org.fennel.users.api.commands.CreatePermissionCommand;
 import org.fennel.users.api.events.PermissionCreatedEvent;
 import org.fennel.users.commands.Permission;
@@ -21,11 +20,11 @@ public class PermissionTests {
     fixture
       .given()
       .when(CreatePermissionCommand.builder()
-        .permissionName(PermissionName.of("READ_USERS"))
+        .permissionName("READ_USERS")
         .description("description")
         .build())
       .expectEvents(PermissionCreatedEvent.builder()
-        .permissionName(PermissionName.of("READ_USERS"))
+        .permissionName("READ_USERS")
         .description("description")
         .build());
   }

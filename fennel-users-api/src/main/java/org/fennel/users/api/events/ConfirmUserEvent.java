@@ -1,8 +1,5 @@
 package org.fennel.users.api.events;
 
-import org.fennel.users.api.UserId;
-import org.fennel.users.api.UserPin;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +20,7 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConfirmUserEvent {
 
-  private final UserId  userId;
-  private final UserPin pin;
+  private final String userId;
+  private final String pin;
 
 }

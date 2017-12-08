@@ -1,10 +1,6 @@
 package org.fennel.users.api.commands;
 
 import org.axonframework.commandhandling.TargetAggregateIdentifier;
-import org.fennel.users.api.Password;
-import org.fennel.users.api.UserId;
-import org.fennel.users.api.UserPin;
-import org.fennel.users.api.Username;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,14 +14,11 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateUserCommand {
 
-  private final UserId   userId;
-  private final String   displayName;
-  private final Username username;
-  private final Password password;
-  private final UserPin  pin;
-
   @TargetAggregateIdentifier
-  public String getTargetAggregateIdentifier() {
-    return userId.getValue();
-  }
+  private final String userId;
+  private final String displayName;
+  private final String username;
+  private final String password;
+  private final String pin;
+
 }

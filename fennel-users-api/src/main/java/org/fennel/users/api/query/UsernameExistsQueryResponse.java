@@ -1,7 +1,5 @@
 package org.fennel.users.api.query;
 
-import org.fennel.users.api.Username;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +12,7 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UsernameExistsQueryResponse {
 
-  private final Username username;
-  private boolean        exists;
+  private final String  username;
+  private final boolean exists;
 
 }

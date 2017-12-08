@@ -1,7 +1,6 @@
 package org.fennel.tasks.api.commands;
 
 import org.axonframework.commandhandling.TargetAggregateIdentifier;
-import org.fennel.tasks.api.TaskId;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,10 +14,7 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateTaskCommand {
 
-  private final TaskId taskId;
-
   @TargetAggregateIdentifier
-  public String getTargetAggregateIdentifier() {
-    return taskId.getValue();
-  }
+  private final String taskId;
+
 }

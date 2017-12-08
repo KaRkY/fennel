@@ -1,7 +1,5 @@
 package org.fennel.users.api.events;
 
-import org.fennel.users.api.PermissionName;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +12,7 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PermissionCreatedEvent {
 
-  private final PermissionName permissionName;
-  private final String         description;
+  private final String permissionName;
+  private final String description;
 
 }

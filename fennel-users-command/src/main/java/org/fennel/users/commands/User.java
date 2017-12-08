@@ -7,9 +7,6 @@ import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.commandhandling.model.AggregateLifecycle;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
-import org.fennel.users.api.Password;
-import org.fennel.users.api.UserPin;
-import org.fennel.users.api.Username;
 import org.fennel.users.api.commands.AddRoleToUserCommand;
 import org.fennel.users.api.commands.AuthorizeCommand;
 import org.fennel.users.api.commands.ConfirmUserCommand;
@@ -32,12 +29,12 @@ public class User implements Serializable {
   private static final long serialVersionUID = -1774630893759721415L;
 
   @AggregateIdentifier
-  private String   userId;
-  private Username username;
-  private Password password;
-  private UserPin  pin;
-  private boolean  locked;
-  private boolean  confirmed;
+  private String  userId;
+  private String  username;
+  private String  password;
+  private String  pin;
+  private boolean locked;
+  private boolean confirmed;
 
   public User() {
   }
@@ -125,7 +122,7 @@ public class User implements Serializable {
 
   @EventSourcingHandler
   public void on(final UserCreatedEvent event) {
-    userId = event.getUserId().getValue();
+    userId = event.getUserId();
     username = event.getUsername();
     password = event.getPassword();
     pin = event.getPin();

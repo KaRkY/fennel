@@ -9,8 +9,6 @@ import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.commandhandling.model.AggregateLifecycle;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
-import org.fennel.users.api.PermissionName;
-import org.fennel.users.api.RoleName;
 import org.fennel.users.api.commands.AddPermissionToGroupCommand;
 import org.fennel.users.api.commands.AddRoleToGroupCommand;
 import org.fennel.users.api.commands.AddUserToGroupCommand;
@@ -29,9 +27,9 @@ public class Group implements Serializable {
   private static final long serialVersionUID = -1774630893759721415L;
 
   @AggregateIdentifier
-  private String                     groupName;
-  private final List<RoleName>       roles       = new ArrayList<>();
-  private final List<PermissionName> permissions = new ArrayList<>();
+  private String             groupName;
+  private final List<String> roles       = new ArrayList<>();
+  private final List<String> permissions = new ArrayList<>();
 
   public Group() {
   }
@@ -94,7 +92,7 @@ public class Group implements Serializable {
 
   @EventSourcingHandler
   public void on(final GroupCreatedEvent event) {
-    groupName = event.getGroupName().getValue();
+    groupName = event.getGroupName();
   }
 
   @EventSourcingHandler

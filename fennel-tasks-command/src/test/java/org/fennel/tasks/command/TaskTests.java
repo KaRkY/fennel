@@ -1,7 +1,6 @@
 package org.fennel.tasks.command;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
-import org.fennel.tasks.api.TaskId;
 import org.fennel.tasks.api.commands.CreateTaskCommand;
 import org.fennel.tasks.api.events.TaskCreatedEvent;
 import org.junit.Before;
@@ -18,12 +17,12 @@ public class TaskTests {
   @Test
   public void createTask() throws Exception {
     fixture
-        .given()
-        .when(CreateTaskCommand.builder()
-            .taskId(TaskId.of("1234"))
-            .build())
-        .expectEvents(TaskCreatedEvent.builder()
-            .taskId(TaskId.of("1234"))
-            .build());
+      .given()
+      .when(CreateTaskCommand.builder()
+        .taskId("1234")
+        .build())
+      .expectEvents(TaskCreatedEvent.builder()
+        .taskId("1234")
+        .build());
   }
 }

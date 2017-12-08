@@ -1,10 +1,5 @@
 package org.fennel.users.api.events;
 
-import org.fennel.users.api.Password;
-import org.fennel.users.api.UserId;
-import org.fennel.users.api.UserPin;
-import org.fennel.users.api.Username;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,12 +12,12 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserCreatedEvent {
 
-  private final UserId   userId;
-  private final String   displayName;
-  private final Username username;
-  private final Password password;
-  private final UserPin  pin;
-  private final boolean  confirmed;
-  private final boolean  locked;
+  private final String  userId;
+  private final String  displayName;
+  private final String  username;
+  private final String  password;
+  private final String  pin;
+  private final boolean confirmed;
+  private final boolean locked;
 
 }

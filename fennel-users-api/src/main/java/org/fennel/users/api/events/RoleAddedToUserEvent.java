@@ -1,8 +1,6 @@
 package org.fennel.users.api.events;
 
 import org.axonframework.commandhandling.TargetAggregateIdentifier;
-import org.fennel.users.api.RoleName;
-import org.fennel.users.api.UserId;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,7 +15,7 @@ import lombok.Value;
 public class RoleAddedToUserEvent {
 
   @TargetAggregateIdentifier
-  private final UserId   userId;
-  private final RoleName roleName;
+  private final String userId;
+  private final String roleName;
 
 }

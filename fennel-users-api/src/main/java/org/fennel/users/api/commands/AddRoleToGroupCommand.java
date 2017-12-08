@@ -1,8 +1,6 @@
 package org.fennel.users.api.commands;
 
 import org.axonframework.commandhandling.TargetAggregateIdentifier;
-import org.fennel.users.api.GroupName;
-import org.fennel.users.api.RoleName;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,11 +14,8 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AddRoleToGroupCommand {
 
-  private final GroupName groupName;
-  private final RoleName  roleName;
-
   @TargetAggregateIdentifier
-  public String getTargetAggregateIdentifier() {
-    return groupName.getValue();
-  }
+  private final String groupName;
+  private final String roleName;
+
 }

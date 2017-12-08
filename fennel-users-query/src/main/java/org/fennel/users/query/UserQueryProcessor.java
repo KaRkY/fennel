@@ -1,7 +1,6 @@
 package org.fennel.users.query;
 
 import org.axonframework.eventhandling.EventHandler;
-import org.fennel.users.api.UsersQueryObjectRepository;
 import org.fennel.users.api.events.UserConfirmedEvent;
 import org.fennel.users.api.events.UserCreatedEvent;
 import org.springframework.stereotype.Component;

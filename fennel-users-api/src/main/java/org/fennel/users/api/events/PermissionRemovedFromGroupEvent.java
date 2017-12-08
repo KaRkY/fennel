@@ -1,8 +1,5 @@
 package org.fennel.users.api.events;
 
-import org.fennel.users.api.GroupName;
-import org.fennel.users.api.PermissionName;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +12,7 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PermissionRemovedFromGroupEvent {
 
-  private final GroupName      groupName;
-  private final PermissionName permissionName;
+  private final String groupName;
+  private final String permissionName;
 
 }

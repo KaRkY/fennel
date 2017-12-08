@@ -1,7 +1,5 @@
 package org.fennel.customers.api.events;
 
-import org.fennel.customers.api.CustomerId;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,5 +12,5 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CustomerCreatedEvent {
 
-  private final CustomerId customerId;
+  private final String customerId;
 }

@@ -1,11 +1,10 @@
 package org.fennel.dev;
 
+import java.util.UUID;
+
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.queryhandling.QueryGateway;
-import org.fennel.users.api.Password;
-import org.fennel.users.api.UserId;
-import org.fennel.users.api.UserPin;
-import org.fennel.users.api.Username;
+import org.fennel.common.StringUtil;
 import org.fennel.users.api.commands.ConfirmUserCommand;
 import org.fennel.users.api.commands.CreateUserCommand;
 import org.fennel.users.api.query.AnyUserExistsRequest;
@@ -32,27 +31,27 @@ public class DataImporter implements CommandLineRunner {
   public void run(final String... args) throws Exception {
 
     queryGateway
-      .send(new AnyUserExistsRequest(), AnyUserExistsResponse.class)
+      .send(AnyUserExistsRequest.builder().build(), AnyUserExistsResponse.class)
       .thenAccept(response -> {
         if (!response.isExists()) {
-          final UserId user1Id = UserId.randomUUID();
-          final UserPin user1Pin = UserPin.random(25);
-          final UserId user2Id = UserId.randomUUID();
-          final UserPin user2Pin = UserPin.random(25);
+          final String user1Id = UUID.randomUUID().toString();
+          final String user1Pin = StringUtil.random(25);
+          final String user2Id = UUID.randomUUID().toString();
+          final String user2Pin = StringUtil.random(25);
 
           commandGateway.sendAndWait(CreateUserCommand.builder()
             .userId(user1Id)
             .displayName("Svetina, Rene")
-            .username(Username.of("rene.svetina@gmail.com"))
-            .password(Password.of("1234"))
+            .username("rene.svetina@gmail.com")
+            .password("1234")
             .pin(user1Pin)
             .build());
 
           commandGateway.sendAndWait(CreateUserCommand.builder()
             .userId(user2Id)
             .displayName("Novak, Janez")
-            .username(Username.of("janez.novak@gmail.com"))
-            .password(Password.of("1234"))
+            .username("janez.novak@gmail.com")
+            .password("1234")
             .pin(user2Pin)
             .build());
 

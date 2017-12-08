@@ -9,7 +9,6 @@ import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.commandhandling.model.AggregateLifecycle;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
-import org.fennel.users.api.PermissionName;
 import org.fennel.users.api.commands.AddPermissionToRoleCommand;
 import org.fennel.users.api.commands.CreateRoleCommand;
 import org.fennel.users.api.commands.RemovePermissionFromRoleCommand;
@@ -22,8 +21,8 @@ public class Role implements Serializable {
   private static final long serialVersionUID = 2134161503548088614L;
 
   @AggregateIdentifier
-  private String                     roleName;
-  private final List<PermissionName> permissions = new ArrayList<>();
+  private String             roleName;
+  private final List<String> permissions = new ArrayList<>();
 
   public Role() {
   }
@@ -58,7 +57,7 @@ public class Role implements Serializable {
 
   @EventSourcingHandler
   public void on(final RoleCreatedEvent event) {
-    roleName = event.getRoleName().getValue();
+    roleName = event.getRoleName();
   }
 
   @EventSourcingHandler

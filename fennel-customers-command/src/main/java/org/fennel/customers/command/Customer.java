@@ -29,6 +29,6 @@ public class Customer implements Serializable {
 
   @EventSourcingHandler
   public void onCustomerCreated(final CustomerCreatedEvent event) {
-    customerId = event.getCustomerId().getValue();
+    customerId = event.getCustomerId();
   }
 }

@@ -30,7 +30,7 @@ public class Permission implements Serializable {
 
   @EventSourcingHandler
   public void onPermissionCreated(final PermissionCreatedEvent event) {
-    permissionName = event.getPermissionName().getValue();
+    permissionName = event.getPermissionName();
   }
 
 }
