@@ -144,15 +144,14 @@
   </pluginRepositories>
 
   <modules>
-    <module>fennel-command-api</module>
+    <module>fennel-common</module>
+    <module>fennel-users-api</module>
     <module>fennel-users-command</module>
     <module>fennel-users-query</module>
+    <module>fennel-customers-api</module>
     <module>fennel-customers-command</module>
+    <module>fennel-tasks-api</module>
     <module>fennel-tasks-command</module>
     <module>fennel-rest</module>
-    <module>fennel-users-api</module>
-    <module>fennel-customers-api</module>
-    <module>fennel-tasks-api</module>
-    <module>fennel-common</module>
   </modules>
 </project>
