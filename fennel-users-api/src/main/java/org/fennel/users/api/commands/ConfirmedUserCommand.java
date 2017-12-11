@@ -1,4 +1,6 @@
-package org.fennel.users.api.query;
+package org.fennel.users.api.commands;
+
+import org.axonframework.commandhandling.TargetAggregateIdentifier;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,10 +12,9 @@ import lombok.Value;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserQueryObject {
+public class ConfirmedUserCommand {
 
-  private String  userId;
-  private String  displayName;
-  private String  username;
-  private boolean locked;
+  @TargetAggregateIdentifier
+  private final String processId;
+
 }

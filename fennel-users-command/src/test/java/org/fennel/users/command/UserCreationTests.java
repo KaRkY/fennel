@@ -1,12 +1,7 @@
 package org.fennel.users.command;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
-import org.fennel.users.api.commands.ConfirmUserCommand;
 import org.fennel.users.api.commands.CreateUserCommand;
-import org.fennel.users.api.commands.NewUserPinCommand;
-import org.fennel.users.api.events.ConfirmUserEvent;
-import org.fennel.users.api.events.NewUserPinEvent;
-import org.fennel.users.api.events.UserConfirmedEvent;
 import org.fennel.users.api.events.UserCreatedEvent;
 import org.fennel.users.commands.User;
 import org.junit.Before;
@@ -29,152 +24,14 @@ public class UserCreationTests {
         .displayName("User 1")
         .username("user1@gmail.com")
         .password("1234")
-        .pin("1234567890")
         .build())
       .expectEvents(UserCreatedEvent.builder()
         .userId("1234")
         .displayName("User 1")
         .username("user1@gmail.com")
         .password("1234")
-        .pin("1234567890")
-        .confirmed(false)
         .locked(false)
         .build());
-  }
-
-  @Test
-  public void userConfirm() throws Exception {
-    fixture
-      .given(
-        UserCreatedEvent.builder()
-          .userId("1234")
-          .displayName("User 1")
-          .username("user1@gmail.com")
-          .password("1234")
-          .pin("1234567890")
-          .confirmed(false)
-          .locked(false)
-          .build())
-      .when(ConfirmUserCommand.builder()
-        .userId("1234")
-        .pin("1234567890")
-        .build())
-      .expectEvents(
-        ConfirmUserEvent.builder()
-          .userId("1234")
-          .pin("1234567890")
-          .build(),
-        UserConfirmedEvent.builder()
-          .userId("1234")
-          .build())
-      .expectReturnValue(true);
-  }
-
-  @Test
-  public void userConfirmFalsePin() throws Exception {
-    fixture
-      .given(
-        UserCreatedEvent.builder()
-          .userId("1234")
-          .displayName("User 1")
-          .username("user1@gmail.com")
-          .password("1234")
-          .pin("1234567890")
-          .confirmed(false)
-          .locked(false)
-          .build())
-      .when(ConfirmUserCommand.builder()
-        .userId("1234")
-        .pin("1234567891")
-        .build())
-      .expectEvents(ConfirmUserEvent.builder()
-        .userId("1234")
-        .pin("1234567891")
-        .build())
-      .expectReturnValue(false);
-  }
-
-  @Test
-  public void userNewPinRequest() throws Exception {
-    fixture
-      .given(
-        UserCreatedEvent.builder()
-          .userId("1234")
-          .displayName("User 1")
-          .username("user1@gmail.com")
-          .password("1234")
-          .pin("1234567890")
-          .confirmed(false)
-          .locked(false)
-          .build())
-      .when(NewUserPinCommand.builder()
-        .userId("1234")
-        .pin("1234567891")
-        .build())
-      .expectEvents(NewUserPinEvent.builder()
-        .userId("1234")
-        .pin("1234567891")
-        .build());
-  }
-
-  @Test
-  public void userPinRequestedConfirm() throws Exception {
-    fixture
-      .given(
-        UserCreatedEvent.builder()
-          .userId("1234")
-          .displayName("User 1")
-          .username("user1@gmail.com")
-          .password("1234")
-          .pin("1234567890")
-          .confirmed(false)
-          .locked(false)
-          .build(),
-        NewUserPinEvent.builder()
-          .userId("1234")
-          .pin("1234567891")
-          .build())
-      .when(ConfirmUserCommand.builder()
-        .userId("1234")
-        .pin("1234567891")
-        .build())
-      .expectEvents(
-        ConfirmUserEvent.builder()
-          .userId("1234")
-          .pin("1234567891")
-          .build(),
-        UserConfirmedEvent.builder()
-          .userId("1234")
-          .build())
-      .expectReturnValue(true);
-  }
-
-  @Test
-  public void userPinRequestedConfirmWithOldPin() throws Exception {
-    fixture
-      .given(
-        UserCreatedEvent.builder()
-          .userId("1234")
-          .displayName("User 1")
-          .username("user1@gmail.com")
-          .password("1234")
-          .pin("1234567890")
-          .confirmed(false)
-          .locked(false)
-          .build(),
-        NewUserPinEvent.builder()
-          .userId("1234")
-          .pin("1234567891")
-          .build())
-      .when(ConfirmUserCommand.builder()
-        .userId("1234")
-        .pin("1234567890")
-        .build())
-      .expectEvents(ConfirmUserEvent.builder()
-        .userId("1234")
-        .pin("1234567890")
-        .build())
-      .expectReturnValue(false);
   }
 
 }

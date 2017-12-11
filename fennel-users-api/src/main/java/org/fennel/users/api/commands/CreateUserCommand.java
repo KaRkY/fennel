@@ -19,6 +19,5 @@ public class CreateUserCommand {
   private final String displayName;
   private final String username;
   private final String password;
-  private final String pin;
 
 }

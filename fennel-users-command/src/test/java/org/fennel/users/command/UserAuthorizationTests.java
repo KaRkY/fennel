@@ -2,10 +2,8 @@ package org.fennel.users.command;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
 import org.fennel.users.api.commands.AuthorizeCommand;
-import org.fennel.users.api.events.ConfirmUserEvent;
 import org.fennel.users.api.events.UserAuthorizationFailedEvent;
 import org.fennel.users.api.events.UserAuthorizedEvent;
-import org.fennel.users.api.events.UserConfirmedEvent;
 import org.fennel.users.api.events.UserCreatedEvent;
 import org.fennel.users.api.events.UserLockedEvent;
 import org.fennel.users.commands.User;
@@ -29,16 +27,7 @@ public class UserAuthorizationTests {
           .displayName("User 1")
           .username("user1@gmail.com")
           .password("1234")
-          .pin("1234567890")
-          .confirmed(false)
           .locked(false)
-          .build(),
-        ConfirmUserEvent.builder()
-          .userId("1234")
-          .pin("1234567890")
-          .build(),
-        UserConfirmedEvent.builder()
-          .userId("1234")
           .build())
       .when(AuthorizeCommand.builder()
         .userId("1234")
@@ -52,32 +41,6 @@ public class UserAuthorizationTests {
   }
 
   @Test
-  public void authorizeUnconfirmedUser() throws Exception {
-    fixture
-      .given(
-        UserCreatedEvent.builder()
-          .userId("1234")
-          .displayName("User 1")
-          .username("user1@gmail.com")
-          .password("1234")
-          .pin("1234567890")
-          .confirmed(false)
-          .locked(false)
-          .build())
-      .when(AuthorizeCommand.builder()
-        .userId("1234")
-        .username("user1@gmail.com")
-        .password("1234")
-        .build())
-      .expectEvents(UserAuthorizationFailedEvent.builder()
-        .userId("1234")
-        .confirmed(false)
-        .locked(false)
-        .build())
-      .expectReturnValue(false);
-  }
-
-  @Test
   public void authorizeLockedUser() throws Exception {
     fixture
       .given(
@@ -86,16 +49,7 @@ public class UserAuthorizationTests {
           .displayName("User 1")
           .username("user1@gmail.com")
           .password("1234")
-          .pin("1234567890")
-          .confirmed(false)
           .locked(false)
-          .build(),
-        ConfirmUserEvent.builder()
-          .userId("1234")
-          .pin("1234567890")
-          .build(),
-        UserConfirmedEvent.builder()
-          .userId("1234")
           .build(),
         UserLockedEvent.builder()
           .userId("1234")
@@ -107,7 +61,6 @@ public class UserAuthorizationTests {
         .build())
       .expectEvents(UserAuthorizationFailedEvent.builder()
         .userId("1234")
-        .confirmed(true)
         .locked(true)
         .build())
       .expectReturnValue(false);

@@ -7,7 +7,11 @@ import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.commandhandling.model.AggregateLifecycle;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
+import org.fennel.users.api.commands.ConfirmUserCommand;
 import org.fennel.users.api.commands.CreateUserCreationProcessCommand;
+import org.fennel.users.api.commands.NewUserPinCommand;
+import org.fennel.users.api.events.ConfirmUserEvent;
+import org.fennel.users.api.events.NewUserPinEvent;
 import org.fennel.users.api.events.UserCreationProcessCreated;
 
 @Aggregate
@@ -16,7 +20,6 @@ public class UserCreationProcess implements Serializable {
 
   @AggregateIdentifier
   private String processId;
-  private String pin;
 
   public UserCreationProcess() {
   }
@@ -24,14 +27,34 @@ public class UserCreationProcess implements Serializable {
   @CommandHandler
   public UserCreationProcess(final CreateUserCreationProcessCommand command) {
     AggregateLifecycle.apply(UserCreationProcessCreated.builder()
-        .processId(command.getProcessId())
-        .pin(command.getPin())
-        .build());
+      .processId(command.getProcessId())
+      .pin(command.getPin())
+      .displayName(command.getDisplayName())
+      .username(command.getUsername())
+      .password(command.getPassword())
+      .build());
+  }
+
+  @CommandHandler
+  public void handle(final ConfirmUserCommand command) {
+    System.out.println(command.getProcessId());
+    AggregateLifecycle.apply(ConfirmUserEvent.builder()
+      .processId(processId)
+      .pin(command.getPin())
+      .build());
+    System.out.println("Sent");
+  }
+
+  @CommandHandler
+  public void handle(final NewUserPinCommand command) {
+    AggregateLifecycle.apply(NewUserPinEvent.builder()
+      .processId(processId)
+      .pin(command.getPin())
+      .build());
   }
 
   @EventSourcingHandler
   public void on(final UserCreationProcessCreated event) {
     processId = event.getProcessId();
-    pin = event.getPin();
   }
 }

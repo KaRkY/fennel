@@ -35,6 +35,7 @@ logging:
       jooq: 
         tools: debug
         Constants: OFF
+      axon: debug
     primrose: debug
     
 

@@ -21,6 +21,6 @@ public class UserQueryProcessor {
 
   @EventHandler
   public void on(final UserConfirmedEvent event) {
-    repository.update(event);
+    // repository.update(event);
   }
 }

@@ -16,8 +16,6 @@ public class UserCreatedEvent {
   private final String  displayName;
   private final String  username;
   private final String  password;
-  private final String  pin;
-  private final boolean confirmed;
   private final boolean locked;
 
 }

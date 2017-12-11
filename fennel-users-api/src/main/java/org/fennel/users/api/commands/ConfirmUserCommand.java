@@ -15,7 +15,7 @@ import lombok.Value;
 public class ConfirmUserCommand {
 
   @TargetAggregateIdentifier
-  private final String userId;
+  private final String processId;
   private final String pin;
 
 }

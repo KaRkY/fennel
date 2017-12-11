@@ -17,5 +17,8 @@ public class CreateUserCreationProcessCommand {
   @TargetAggregateIdentifier
   private final String processId;
   private final String pin;
+  private final String displayName;
+  private final String username;
+  private final String password;
 
 }

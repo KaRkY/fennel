@@ -12,7 +12,7 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class NewUserPinEvent {
 
-  private final String userId;
+  private final String processId;
   private final String pin;
 
 }

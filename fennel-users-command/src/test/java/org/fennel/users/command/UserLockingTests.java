@@ -3,8 +3,6 @@ package org.fennel.users.command;
 import org.axonframework.test.aggregate.AggregateTestFixture;
 import org.fennel.users.api.commands.LockUserCommand;
 import org.fennel.users.api.commands.UnlockUserCommand;
-import org.fennel.users.api.events.ConfirmUserEvent;
-import org.fennel.users.api.events.UserConfirmedEvent;
 import org.fennel.users.api.events.UserCreatedEvent;
 import org.fennel.users.api.events.UserLockedEvent;
 import org.fennel.users.api.events.UserUnlockedEvent;
@@ -29,8 +27,6 @@ public class UserLockingTests {
           .displayName("User 1")
           .username("user1@gmail.com")
           .password("1234")
-          .pin("1234567890")
-          .confirmed(false)
           .locked(false)
           .build())
       .when(LockUserCommand.builder()
@@ -50,16 +46,7 @@ public class UserLockingTests {
           .displayName("User 1")
           .username("user1@gmail.com")
           .password("1234")
-          .pin("1234567890")
-          .confirmed(false)
           .locked(false)
-          .build(),
-        ConfirmUserEvent.builder()
-          .userId("1234")
-          .pin("1234567890")
-          .build(),
-        UserConfirmedEvent.builder()
-          .userId("1234")
           .build())
       .when(LockUserCommand.builder()
         .userId("1234")
@@ -78,16 +65,7 @@ public class UserLockingTests {
           .displayName("User 1")
           .username("user1@gmail.com")
           .password("1234")
-          .pin("1234567890")
-          .confirmed(false)
           .locked(false)
-          .build(),
-        ConfirmUserEvent.builder()
-          .userId("1234")
-          .pin("1234567890")
-          .build(),
-        UserConfirmedEvent.builder()
-          .userId("1234")
           .build(),
         UserLockedEvent.builder()
           .userId("1234")
@@ -107,16 +85,7 @@ public class UserLockingTests {
           .displayName("User 1")
           .username("user1@gmail.com")
           .password("1234")
-          .pin("1234567890")
-          .confirmed(false)
           .locked(false)
-          .build(),
-        ConfirmUserEvent.builder()
-          .userId("1234")
-          .pin("1234567890")
-          .build(),
-        UserConfirmedEvent.builder()
-          .userId("1234")
           .build(),
         UserLockedEvent.builder()
           .userId("1234")
@@ -138,16 +107,7 @@ public class UserLockingTests {
           .displayName("User 1")
           .username("user1@gmail.com")
           .password("1234")
-          .pin("1234567890")
-          .confirmed(false)
           .locked(false)
-          .build(),
-        ConfirmUserEvent.builder()
-          .userId("1234")
-          .pin("1234567890")
-          .build(),
-        UserConfirmedEvent.builder()
-          .userId("1234")
           .build())
       .when(UnlockUserCommand.builder()
         .userId("1234")

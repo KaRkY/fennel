@@ -13,7 +13,6 @@ import lombok.Value;
 public class UserAuthorizationFailedEvent {
 
   private final String  userId;
-  private final boolean confirmed;
   private final boolean locked;
 
 }

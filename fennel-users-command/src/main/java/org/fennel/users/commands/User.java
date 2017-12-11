@@ -9,17 +9,12 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.fennel.users.api.commands.AddRoleToUserCommand;
 import org.fennel.users.api.commands.AuthorizeCommand;
-import org.fennel.users.api.commands.ConfirmUserCommand;
 import org.fennel.users.api.commands.CreateUserCommand;
 import org.fennel.users.api.commands.LockUserCommand;
-import org.fennel.users.api.commands.NewUserPinCommand;
 import org.fennel.users.api.commands.UnlockUserCommand;
-import org.fennel.users.api.events.ConfirmUserEvent;
-import org.fennel.users.api.events.NewUserPinEvent;
 import org.fennel.users.api.events.RoleAddedToUserEvent;
 import org.fennel.users.api.events.UserAuthorizationFailedEvent;
 import org.fennel.users.api.events.UserAuthorizedEvent;
-import org.fennel.users.api.events.UserConfirmedEvent;
 import org.fennel.users.api.events.UserCreatedEvent;
 import org.fennel.users.api.events.UserLockedEvent;
 import org.fennel.users.api.events.UserUnlockedEvent;
@@ -32,9 +27,7 @@ public class User implements Serializable {
   private String  userId;
   private String  username;
   private String  password;
-  private String  pin;
   private boolean locked;
-  private boolean confirmed;
 
   public User() {
   }
@@ -46,31 +39,7 @@ public class User implements Serializable {
       .displayName(command.getDisplayName())
       .username(command.getUsername())
       .password(command.getPassword())
-      .pin(command.getPin())
-      .confirmed(false)
       .locked(false)
-      .build());
-  }
-
-  @CommandHandler
-  public boolean handle(final ConfirmUserCommand command) {
-    AggregateLifecycle.apply(ConfirmUserEvent.builder()
-      .userId(command.getUserId())
-      .pin(command.getPin())
-      .build());
-    if (pin != null && pin.equals(command.getPin())) {
-      AggregateLifecycle.apply(UserConfirmedEvent.builder()
-        .userId(command.getUserId())
-        .build());
-      return true;
-    } else return pin == null;
-  }
-
-  @CommandHandler
-  public void handle(final NewUserPinCommand command) {
-    AggregateLifecycle.apply(NewUserPinEvent.builder()
-      .userId(command.getUserId())
-      .pin(command.getPin())
       .build());
   }
 
@@ -96,8 +65,7 @@ public class User implements Serializable {
   public boolean handle(final AuthorizeCommand command) {
     if (username.equals(command.getUsername()) &&
       password.equals(command.getPassword()) &&
-      !locked &&
-      confirmed) {
+      !locked) {
       AggregateLifecycle.apply(UserAuthorizedEvent.builder()
         .userId(command.getUserId())
         .build());
@@ -105,7 +73,6 @@ public class User implements Serializable {
     } else {
       AggregateLifecycle.apply(UserAuthorizationFailedEvent.builder()
         .userId(command.getUserId())
-        .confirmed(confirmed)
         .locked(locked)
         .build());
       return false;
@@ -125,20 +92,7 @@ public class User implements Serializable {
     userId = event.getUserId();
     username = event.getUsername();
     password = event.getPassword();
-    pin = event.getPin();
-    confirmed = event.isConfirmed();
     locked = event.isLocked();
-  }
-
-  @EventSourcingHandler
-  public void on(final UserConfirmedEvent event) {
-    pin = null;
-    confirmed = true;
-  }
-
-  @EventSourcingHandler
-  public void on(final NewUserPinEvent event) {
-    pin = event.getPin();
   }
 
   @EventSourcingHandler

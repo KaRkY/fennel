@@ -3,7 +3,6 @@ package org.fennel.users.query;
 import java.util.List;
 
 import org.fennel.common.Pagination;
-import org.fennel.users.api.events.UserConfirmedEvent;
 import org.fennel.users.api.events.UserCreatedEvent;
 import org.fennel.users.api.query.UserQueryObject;
 import org.fennel.users.query.jooq.Tables;
@@ -27,23 +26,13 @@ public class UsersQueryObjectRepository {
         Tables.USERS.DISPLAY_NAME,
         Tables.USERS.USERNAME,
         Tables.USERS.PASSWORD,
-        Tables.USERS.CONFIRMED,
         Tables.USERS.LOCKED)
       .values(
         event.getUserId(),
         event.getDisplayName(),
         event.getUsername(),
         event.getPassword(),
-        event.isConfirmed(),
         event.isLocked())
-      .execute();
-  }
-
-  public void update(final UserConfirmedEvent event) {
-    create
-      .update(Tables.USERS)
-      .set(Tables.USERS.CONFIRMED, true)
-      .where(Tables.USERS.USER_ID.eq(event.getUserId()))
       .execute();
   }
 
@@ -82,7 +71,6 @@ public class UsersQueryObjectRepository {
         .userId(record.get(Tables.USERS.USER_ID))
         .displayName(record.get(Tables.USERS.DISPLAY_NAME))
         .username(record.get(Tables.USERS.USERNAME))
-        .confirmed(record.get(Tables.USERS.CONFIRMED))
         .locked(record.get(Tables.USERS.LOCKED))
         .build());
   }

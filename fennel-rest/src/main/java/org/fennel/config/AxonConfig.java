@@ -6,6 +6,8 @@ import javax.sql.DataSource;
 
 import org.axonframework.common.jdbc.ConnectionProvider;
 import org.axonframework.common.transaction.TransactionManager;
+import org.axonframework.config.SagaConfiguration;
+import org.axonframework.eventhandling.EventBus;
 import org.axonframework.eventhandling.saga.repository.SagaStore;
 import org.axonframework.eventhandling.saga.repository.jdbc.JdbcSagaStore;
 import org.axonframework.eventhandling.saga.repository.jdbc.PostgresSagaSqlSchema;
@@ -21,9 +23,12 @@ import org.axonframework.eventsourcing.eventstore.jdbc.JdbcEventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.jdbc.PostgresEventTableFactory;
 import org.axonframework.serialization.Serializer;
 import org.axonframework.serialization.json.JacksonSerializer;
+import org.axonframework.spring.eventhandling.scheduling.java.SimpleEventSchedulerFactoryBean;
 import org.axonframework.spring.jdbc.SpringDataSourceConnectionProvider;
+import org.fennel.users.sagas.UserCreationProcessSaga;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -90,5 +95,21 @@ public class AxonConfig {
     final Serializer serializer,
     final SpringDataSourceConnectionProvider dataSource) {
     return new JdbcTokenStore(dataSource, serializer);
+  }
+
+  @Bean
+  public SimpleEventSchedulerFactoryBean eventScheduler(
+    final EventBus eventBus,
+    final PlatformTransactionManager transactionManager) {
+    final SimpleEventSchedulerFactoryBean eventSchedulerFactory = new SimpleEventSchedulerFactoryBean();
+    eventSchedulerFactory.setEventBus(eventBus);
+    eventSchedulerFactory.setTransactionManager(transactionManager);
+    return eventSchedulerFactory;
+  }
+
+  @Bean
+  public SagaConfiguration<UserCreationProcessSaga> userCreationProcessSagaConfiguration() {
+    return SagaConfiguration
+      .trackingSagaManager(UserCreationProcessSaga.class);
   }
 }

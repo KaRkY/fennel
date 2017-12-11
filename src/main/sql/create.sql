@@ -21,7 +21,6 @@ create table users(
   display_name  text,
   username      text,
   password      text,
-  confirmed     bool,
   locked        bool,
   
   constraint users_pkey primary key (user_id)

@@ -12,6 +12,6 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserConfirmedEvent {
 
-  private final String userId;
+  private final String processId;
 
 }
