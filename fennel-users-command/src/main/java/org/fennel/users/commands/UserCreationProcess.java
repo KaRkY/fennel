@@ -8,10 +8,12 @@ import org.axonframework.commandhandling.model.AggregateLifecycle;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.fennel.users.api.commands.ConfirmUserCommand;
+import org.fennel.users.api.commands.ConfirmedUserCommand;
 import org.fennel.users.api.commands.CreateUserCreationProcessCommand;
 import org.fennel.users.api.commands.NewUserPinCommand;
 import org.fennel.users.api.events.ConfirmUserEvent;
 import org.fennel.users.api.events.NewUserPinEvent;
+import org.fennel.users.api.events.UserConfirmedEvent;
 import org.fennel.users.api.events.UserCreationProcessCreated;
 
 @Aggregate
@@ -37,12 +39,17 @@ public class UserCreationProcess implements Serializable {
 
   @CommandHandler
   public void handle(final ConfirmUserCommand command) {
-    System.out.println(command.getProcessId());
     AggregateLifecycle.apply(ConfirmUserEvent.builder()
       .processId(processId)
       .pin(command.getPin())
       .build());
-    System.out.println("Sent");
+  }
+
+  @CommandHandler
+  public void handle(final ConfirmedUserCommand command) {
+    AggregateLifecycle.apply(UserConfirmedEvent.builder()
+      .processId(processId)
+      .build());
   }
 
   @CommandHandler

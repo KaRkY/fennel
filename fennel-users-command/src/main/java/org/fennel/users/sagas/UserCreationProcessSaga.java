@@ -33,14 +33,9 @@ public class UserCreationProcessSaga {
   private String        username;
   private String        password;
 
-  public UserCreationProcessSaga() {
-    System.out.println("aiopehdfioasdf");
-  }
-
   @StartSaga
   @SagaEventHandler(associationProperty = "processId")
   public void handle(final UserCreationProcessCreated event) {
-    System.out.println(event.getPin());
     pin = event.getPin();
     displayName = event.getDisplayName();
     username = event.getUsername();
@@ -52,14 +47,11 @@ public class UserCreationProcessSaga {
 
   @SagaEventHandler(associationProperty = "processId")
   public void handle(final ConfirmUserEvent event) {
-    System.out.println(String.format("%s %s", pin, event.getPin()));
     if (pin != null && pin.equals(event.getPin())) {
 
       commandGateway.sendAndWait(ConfirmedUserCommand.builder()
         .processId(event.getProcessId())
         .build());
-
-      System.out.println("Lala");
 
       commandGateway.sendAndWait(CreateUserCommand.builder()
         .userId(UUID.randomUUID().toString())
@@ -67,8 +59,6 @@ public class UserCreationProcessSaga {
         .username(username)
         .password(password)
         .build());
-
-      System.out.println("Lele");
 
       eventScheduler.cancelSchedule(terminationToken);
       SagaLifecycle.end();

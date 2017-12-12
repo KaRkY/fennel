@@ -62,7 +62,7 @@ public class DataImporter implements CommandLineRunner {
 
           log.info("Confirming user process {}", process1Id);
           commandGateway.sendAndWait(ConfirmUserCommand.builder()
-            .processId(process1Id)
+            .processId(process1Id + "1")
             .pin(user1Pin)
             .build());
 
@@ -71,6 +71,11 @@ public class DataImporter implements CommandLineRunner {
             .processId(process2Id)
             .pin(user2Pin)
             .build());
+        }
+      })
+      .whenComplete((r, e) -> {
+        if (e != null) {
+          log.error(e.getMessage(), e);
         }
       });
   }

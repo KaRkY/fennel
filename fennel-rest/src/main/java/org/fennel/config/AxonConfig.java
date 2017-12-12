@@ -1,12 +1,13 @@
 package org.fennel.config;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
 import org.axonframework.common.jdbc.ConnectionProvider;
 import org.axonframework.common.transaction.TransactionManager;
-import org.axonframework.config.SagaConfiguration;
 import org.axonframework.eventhandling.EventBus;
 import org.axonframework.eventhandling.saga.repository.SagaStore;
 import org.axonframework.eventhandling.saga.repository.jdbc.JdbcSagaStore;
@@ -22,22 +23,34 @@ import org.axonframework.eventsourcing.eventstore.jdbc.EventTableFactory;
 import org.axonframework.eventsourcing.eventstore.jdbc.JdbcEventStorageEngine;
 import org.axonframework.eventsourcing.eventstore.jdbc.PostgresEventTableFactory;
 import org.axonframework.serialization.Serializer;
-import org.axonframework.serialization.json.JacksonSerializer;
+import org.axonframework.serialization.xml.XStreamSerializer;
 import org.axonframework.spring.eventhandling.scheduling.java.SimpleEventSchedulerFactoryBean;
 import org.axonframework.spring.jdbc.SpringDataSourceConnectionProvider;
-import org.fennel.users.sagas.UserCreationProcessSaga;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
 
 @Configuration
 public class AxonConfig {
 
   @Bean
-  public JacksonSerializer serializer(final ObjectMapper objectMapper) {
-    return new JacksonSerializer(objectMapper);
+  @Profile("dev")
+  public Serializer serializer(final ObjectMapper objectMapper) {
+    final XStreamSerializer serializer = new XStreamSerializer() {
+      @Override
+      protected <T> T doSerialize(final Object object, final Class<T> expectedFormat, final XStream xStream) {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        xStream.marshal(object, new PrettyPrintWriter(new OutputStreamWriter(baos, getCharset())));
+        return convert(baos.toByteArray(), byte[].class, expectedFormat);
+      }
+    };
+
+    return serializer;
   }
 
   @Bean
@@ -105,11 +118,5 @@ public class AxonConfig {
     eventSchedulerFactory.setEventBus(eventBus);
     eventSchedulerFactory.setTransactionManager(transactionManager);
     return eventSchedulerFactory;
-  }
-
-  @Bean
-  public SagaConfiguration<UserCreationProcessSaga> userCreationProcessSagaConfiguration() {
-    return SagaConfiguration
-      .trackingSagaManager(UserCreationProcessSaga.class);
   }
 }
