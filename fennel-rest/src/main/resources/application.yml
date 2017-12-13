@@ -15,7 +15,12 @@ axon:
       "[org.fennel.users.query]":
         mode: tracking
         source: eventBus
-    
+
+logging:
+  level:
+    org:
+      jooq: 
+        Constants: OFF
 
 ---
 ##Development settings
@@ -29,14 +34,21 @@ spring:
   jackson:
     serialization:
       indent_output: true
+  output:
+    ansi:
+      enabled: ALWAYS
 logging:
   level:
     org:
       jooq: 
-        tools: debug
+        ##tools: debug
         Constants: OFF
-      axon: debug
+      ##axon: debug
     primrose: debug
+management:
+  endpoints:
+    web:
+      expose: "*"
     
 
 ---
