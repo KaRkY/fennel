@@ -119,4 +119,13 @@ public class AxonConfig {
     eventSchedulerFactory.setTransactionManager(transactionManager);
     return eventSchedulerFactory;
   }
+
+  // @Autowired
+  // public void configure(final SimpleCommandBus simpleCommandBus) {
+  // simpleCommandBus.registerDispatchInterceptor(messages -> (index, message) ->
+  // {
+  // System.out.println(message.getPayload());
+  // return message;
+  // });
+  // }
 }

@@ -1,9 +1,9 @@
 package org.fennel.users.command;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
-import org.fennel.users.api.commands.CreateUserCommand;
-import org.fennel.users.api.events.UserCreatedEvent;
-import org.fennel.users.commands.User;
+import org.fennel.users.api.user.CreateCommand;
+import org.fennel.users.api.user.CreatedEvent;
+import org.fennel.users.command.User;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,13 +19,13 @@ public class UserCreationTests {
   public void createUser() throws Exception {
     fixture
       .given()
-      .when(CreateUserCommand.builder()
+      .when(CreateCommand.builder()
         .userId("1234")
         .displayName("User 1")
         .username("user1@gmail.com")
         .password("1234")
         .build())
-      .expectEvents(UserCreatedEvent.builder()
+      .expectEvents(CreatedEvent.builder()
         .userId("1234")
         .displayName("User 1")
         .username("user1@gmail.com")

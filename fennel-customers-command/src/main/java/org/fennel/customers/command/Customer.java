@@ -7,8 +7,8 @@ import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.commandhandling.model.AggregateLifecycle;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
-import org.fennel.customers.api.commands.CreateCustomerCommand;
-import org.fennel.customers.api.events.CustomerCreatedEvent;
+import org.fennel.customers.api.customer.CreateCommand;
+import org.fennel.customers.api.customer.CreatedEvent;
 
 @Aggregate
 public class Customer implements Serializable {
@@ -21,14 +21,14 @@ public class Customer implements Serializable {
   }
 
   @CommandHandler
-  public Customer(final CreateCustomerCommand command) {
-    AggregateLifecycle.apply(CustomerCreatedEvent.builder()
+  public Customer(final CreateCommand command) {
+    AggregateLifecycle.apply(CreatedEvent.builder()
       .customerId(command.getCustomerId())
       .build());
   }
 
   @EventSourcingHandler
-  public void onCustomerCreated(final CustomerCreatedEvent event) {
+  public void onCustomerCreated(final CreatedEvent event) {
     customerId = event.getCustomerId();
   }
 }

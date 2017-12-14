@@ -55,7 +55,10 @@
 
             <database>
               <name>org.jooq.util.postgres.PostgresDatabase</name>
-              <includes>users</includes>
+              <includes>
+                users
+                | user_creation_processes
+              </includes>
               <excludes></excludes>
               <schemata>
                 <schema>

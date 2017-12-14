@@ -5,6 +5,7 @@
  - Simple management GUI
  - User confirmation Saga
  - UserCreationProcess as AR.
+ - Test user creation process states
 
 --- Customers ---
  - Define which data is needed for customer(VAT number, Name, etc.)

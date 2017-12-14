@@ -1,12 +1,12 @@
 package org.fennel.users.command;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
-import org.fennel.users.api.commands.AuthorizeCommand;
-import org.fennel.users.api.events.UserAuthorizationFailedEvent;
-import org.fennel.users.api.events.UserAuthorizedEvent;
-import org.fennel.users.api.events.UserCreatedEvent;
-import org.fennel.users.api.events.UserLockedEvent;
-import org.fennel.users.commands.User;
+import org.fennel.users.api.user.AuthorizationFailedEvent;
+import org.fennel.users.api.user.AuthorizeCommand;
+import org.fennel.users.api.user.AuthorizedEvent;
+import org.fennel.users.api.user.CreatedEvent;
+import org.fennel.users.api.user.FailAuthorizationCommand;
+import org.fennel.users.command.User;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +22,7 @@ public class UserAuthorizationTests {
   public void authorizeUser() throws Exception {
     fixture
       .given(
-        UserCreatedEvent.builder()
+        CreatedEvent.builder()
           .userId("1234")
           .displayName("User 1")
           .username("user1@gmail.com")
@@ -34,35 +34,27 @@ public class UserAuthorizationTests {
         .username("user1@gmail.com")
         .password("1234")
         .build())
-      .expectEvents(UserAuthorizedEvent.builder()
+      .expectEvents(AuthorizedEvent.builder()
         .userId("1234")
-        .build())
-      .expectReturnValue(true);
+        .build());
   }
 
   @Test
-  public void authorizeLockedUser() throws Exception {
+  public void failAuthorizeUser() throws Exception {
     fixture
       .given(
-        UserCreatedEvent.builder()
+        CreatedEvent.builder()
           .userId("1234")
           .displayName("User 1")
           .username("user1@gmail.com")
           .password("1234")
           .locked(false)
-          .build(),
-        UserLockedEvent.builder()
-          .userId("1234")
           .build())
-      .when(AuthorizeCommand.builder()
+      .when(FailAuthorizationCommand.builder()
         .userId("1234")
-        .username("user1@gmail.com")
-        .password("1234")
         .build())
-      .expectEvents(UserAuthorizationFailedEvent.builder()
+      .expectEvents(AuthorizationFailedEvent.builder()
         .userId("1234")
-        .locked(true)
-        .build())
-      .expectReturnValue(false);
+        .build());
   }
 }

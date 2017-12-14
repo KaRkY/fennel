@@ -1,8 +1,8 @@
 package org.fennel.customers;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
-import org.fennel.customers.api.commands.CreateCustomerCommand;
-import org.fennel.customers.api.events.CustomerCreatedEvent;
+import org.fennel.customers.api.customer.CreateCommand;
+import org.fennel.customers.api.customer.CreatedEvent;
 import org.fennel.customers.command.Customer;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,10 +19,10 @@ public class CustomerCreationTests {
   public void testCreateCustomer() throws Exception {
     fixture
       .given()
-      .when(CreateCustomerCommand.builder()
+      .when(CreateCommand.builder()
         .customerId("1234")
         .build())
-      .expectEvents(CustomerCreatedEvent.builder()
+      .expectEvents(CreatedEvent.builder()
         .customerId("1234")
         .build());
   }

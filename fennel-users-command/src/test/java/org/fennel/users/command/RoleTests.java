@@ -1,13 +1,13 @@
 package org.fennel.users.command;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
-import org.fennel.users.api.commands.AddPermissionToRoleCommand;
-import org.fennel.users.api.commands.CreateRoleCommand;
-import org.fennel.users.api.commands.RemovePermissionFromRoleCommand;
-import org.fennel.users.api.events.PermissionAddedToRoleEvent;
-import org.fennel.users.api.events.PermissionRemovedFromRoleEvent;
-import org.fennel.users.api.events.RoleCreatedEvent;
-import org.fennel.users.commands.Role;
+import org.fennel.users.api.role.AddPermissionCommand;
+import org.fennel.users.api.role.CreateCommand;
+import org.fennel.users.api.role.PermissionAddedEvent;
+import org.fennel.users.api.role.PermissionRemovedEvent;
+import org.fennel.users.api.role.RemovePermissionCommand;
+import org.fennel.users.command.Role;
+import org.fennel.users.api.role.CreatedEvent;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,11 +23,11 @@ public class RoleTests {
   public void createGroup() throws Exception {
     fixture
       .given()
-      .when(CreateRoleCommand.builder()
+      .when(CreateCommand.builder()
         .roleName("root")
         .description("description")
         .build())
-      .expectEvents(RoleCreatedEvent.builder()
+      .expectEvents(CreatedEvent.builder()
         .roleName("root")
         .description("description")
         .build());
@@ -36,15 +36,15 @@ public class RoleTests {
   @Test
   public void addPermission() throws Exception {
     fixture
-      .given(RoleCreatedEvent.builder()
+      .given(CreatedEvent.builder()
         .roleName("root")
         .description("description")
         .build())
-      .when(AddPermissionToRoleCommand.builder()
+      .when(AddPermissionCommand.builder()
         .roleName("root")
         .permissionName("root")
         .build())
-      .expectEvents(PermissionAddedToRoleEvent.builder()
+      .expectEvents(PermissionAddedEvent.builder()
         .roleName("root")
         .permissionName("root")
         .build());
@@ -54,15 +54,15 @@ public class RoleTests {
   public void addExistingPermission() throws Exception {
     fixture
       .given(
-        RoleCreatedEvent.builder()
+        CreatedEvent.builder()
           .roleName("root")
           .description("description")
           .build(),
-        PermissionAddedToRoleEvent.builder()
+        PermissionAddedEvent.builder()
           .roleName("root")
           .permissionName("root")
           .build())
-      .when(AddPermissionToRoleCommand.builder()
+      .when(AddPermissionCommand.builder()
         .roleName("root")
         .permissionName("root")
         .build())
@@ -73,19 +73,19 @@ public class RoleTests {
   public void removePermission() throws Exception {
     fixture
       .given(
-        RoleCreatedEvent.builder()
+        CreatedEvent.builder()
           .roleName("root")
           .description("description")
           .build(),
-        PermissionAddedToRoleEvent.builder()
+        PermissionAddedEvent.builder()
           .roleName("root")
           .permissionName("root")
           .build())
-      .when(RemovePermissionFromRoleCommand.builder()
+      .when(RemovePermissionCommand.builder()
         .roleName("root")
         .permissionName("root")
         .build())
-      .expectEvents(PermissionRemovedFromRoleEvent.builder()
+      .expectEvents(PermissionRemovedEvent.builder()
         .roleName("root")
         .permissionName("root")
         .build());
@@ -94,11 +94,11 @@ public class RoleTests {
   @Test
   public void removeNonExistingPermission() throws Exception {
     fixture
-      .given(RoleCreatedEvent.builder()
+      .given(CreatedEvent.builder()
         .roleName("root")
         .description("description")
         .build())
-      .when(RemovePermissionFromRoleCommand.builder()
+      .when(RemovePermissionCommand.builder()
         .roleName("root")
         .permissionName("root")
         .build())

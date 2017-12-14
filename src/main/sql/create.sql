@@ -16,6 +16,24 @@ create sequence domainevententry_globalindex_seq start with 1 increment by 1;
  * 
  */
 
+create table reserved_usernames(
+  process_id  text not null,
+  username    text not null,
+
+  constraint reserved_usernames_pkey primary key (process_id),
+  constraint reserved_usernames_username_uq unique(username)
+);
+
+create table user_creation_processes(
+  process_id    text not null,
+  display_name  text,
+  username      text,
+  password      text,
+  state         text,
+
+  constraint user_creation_processes_pkey primary key (process_id)
+);
+
 create table users(
   user_id       text not null,
   display_name  text,
@@ -99,7 +117,7 @@ create table domainevententry (
   metadata            bytea null,
   payload             bytea not null,
   payloadrevision     text null,
-  payloadtype         text not null,
+  payloadtype         text not null, 
   "timestamp"         text not null,
   
   constraint domainevententry_aggregateidentifier_sequencenumber_key unique (aggregateidentifier,sequencenumber),
