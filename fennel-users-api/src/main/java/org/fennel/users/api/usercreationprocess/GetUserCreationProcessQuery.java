@@ -1,7 +1,5 @@
 package org.fennel.users.api.usercreationprocess;
 
-import org.springframework.data.domain.Pageable;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,8 +10,8 @@ import lombok.Value;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ListUserCreationProcessesQuery {
+public class GetUserCreationProcessQuery {
 
-  private final Pageable pageable;
+  private final String processId;
 
 }

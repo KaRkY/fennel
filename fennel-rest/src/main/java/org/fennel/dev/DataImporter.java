@@ -5,8 +5,8 @@ import java.util.UUID;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.queryhandling.QueryGateway;
 import org.fennel.common.StringUtil;
-import org.fennel.users.api.user.UsernameAvaibleQuery;
-import org.fennel.users.api.user.UsernameAvaibleQueryResponse;
+import org.fennel.users.api.user.AnyUserAvaibleQuery;
+import org.fennel.users.api.user.AnyUserAvaibleQueryResponse;
 import org.fennel.users.api.usercreationprocess.ConfirmCommand;
 import org.fennel.users.api.usercreationprocess.CreateCommand;
 import org.springframework.boot.CommandLineRunner;
@@ -39,8 +39,8 @@ public class DataImporter implements CommandLineRunner {
   public void run(final String... args) throws Exception {
 
     Mono.fromFuture(queryGateway
-      .send(UsernameAvaibleQuery.builder().build(), UsernameAvaibleQueryResponse.class))
-      .filter(UsernameAvaibleQueryResponse::isAvaible)
+      .send(new AnyUserAvaibleQuery(), AnyUserAvaibleQueryResponse.class))
+      .filter(AnyUserAvaibleQueryResponse::isAvaible)
       .subscribeOn(scheduler)
       .subscribe(
         response -> {

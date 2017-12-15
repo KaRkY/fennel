@@ -1,4 +1,4 @@
-package org.fennel.common;
+package org.fennel.users;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,10 +10,9 @@ import lombok.Value;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Pagination {
+public class CreateUser {
 
-  private final Integer page;
-  private final Integer pageSize;
-  private final Sort    sort;
-
+  private final String displayName;
+  private final String username;
+  private final String password;
 }

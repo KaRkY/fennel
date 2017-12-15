@@ -1,12 +1,18 @@
 package org.fennel.users.query.user;
 
-import java.util.List;
+import java.util.Optional;
 
-import org.fennel.common.Pagination;
+import org.fennel.common.JooqUtil;
 import org.fennel.users.api.user.CreatedEvent;
 import org.fennel.users.api.user.UserQueryObject;
 import org.fennel.users.query.jooq.Tables;
 import org.jooq.DSLContext;
+import org.jooq.Record4;
+import org.jooq.ResultQuery;
+import org.jooq.SelectSeekStepN;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 public class Repository {
 
@@ -53,23 +59,59 @@ public class Repository {
       .from(Tables.USERS));
   }
 
-  public List<UserQueryObject> list(final Pagination pagination) {
-    final Integer pageSize = pagination != null ? pagination.getPageSize() : null;
-    final Integer page = pagination != null ? pagination.getPage() : null;
+  public Page<UserQueryObject> list(final Pageable pageable) {
 
-    final Integer limit = pageSize != null ? pageSize : Integer.MAX_VALUE;
-    final Integer offset = page == null || pageSize == null ? 0 : (page - 1) * pageSize;
-
-    return create
+    final SelectSeekStepN<Record4<String, String, String, Boolean>> select = create
       .select(
         Tables.USERS.USER_ID,
         Tables.USERS.DISPLAY_NAME,
         Tables.USERS.USERNAME,
         Tables.USERS.LOCKED)
       .from(Tables.USERS)
-      .offset(offset)
-      .limit(limit)
+      .orderBy(JooqUtil.map(
+        pageable.getSort(),
+        property -> {
+          switch (property) {
+          case "displayName":
+            return Tables.USERS.DISPLAY_NAME;
+
+          case "username":
+            return Tables.USERS.USERNAME;
+
+          default:
+            return null;
+          }
+        }));
+
+    ResultQuery<Record4<String, String, String, Boolean>> resQuery = null;
+    if (pageable.isPaged()) {
+      resQuery = select
+        .offset((int) pageable.getOffset())
+        .limit(pageable.getPageSize());
+    } else {
+      resQuery = select;
+    }
+
+    return new PageImpl<>(resQuery
       .fetch(record -> UserQueryObject.builder()
+        .userId(record.get(Tables.USERS.USER_ID))
+        .displayName(record.get(Tables.USERS.DISPLAY_NAME))
+        .username(record.get(Tables.USERS.USERNAME))
+        .locked(record.get(Tables.USERS.LOCKED))
+        .build()),
+      pageable, count());
+  }
+
+  public Optional<UserQueryObject> get(final String userId) {
+    return create.select(
+      Tables.USERS.USER_ID,
+      Tables.USERS.DISPLAY_NAME,
+      Tables.USERS.USERNAME,
+      Tables.USERS.LOCKED)
+      .from(Tables.USERS)
+      .where(Tables.USERS.USER_ID.eq(userId))
+      .fetchOptional()
+      .map(record -> UserQueryObject.builder()
         .userId(record.get(Tables.USERS.USER_ID))
         .displayName(record.get(Tables.USERS.DISPLAY_NAME))
         .username(record.get(Tables.USERS.USERNAME))

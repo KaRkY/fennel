@@ -1,8 +1,6 @@
 package org.fennel.users.api.user;
 
-import java.util.List;
-
-import org.fennel.common.Pagination;
+import org.springframework.data.domain.Page;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,8 +14,6 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ListUsersQueryResponse {
 
-  private final Pagination            pagination;
-  private final Integer               size;
-  private final List<UserQueryObject> users;
+  private final Page<UserQueryObject> page;
 
 }

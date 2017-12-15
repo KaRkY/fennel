@@ -1,11 +1,10 @@
 package org.fennel.users.query.usercreationprocess;
 
-import java.util.List;
-
 import org.axonframework.queryhandling.QueryHandler;
+import org.fennel.users.api.usercreationprocess.GetUserCreationProcessQuery;
+import org.fennel.users.api.usercreationprocess.GetUserCreationProcessQueryResponse;
 import org.fennel.users.api.usercreationprocess.ListUserCreationProcessesQuery;
 import org.fennel.users.api.usercreationprocess.ListUserCreationProcessesQueryResponse;
-import org.fennel.users.api.usercreationprocess.UserCreationProcessQueryObject;
 
 public class Handler {
 
@@ -17,13 +16,15 @@ public class Handler {
 
   @QueryHandler
   public ListUserCreationProcessesQueryResponse handle(final ListUserCreationProcessesQuery request) {
-    final Integer count = repository.count();
-    final List<UserCreationProcessQueryObject> users = repository.list(request.getPagination());
-
     return ListUserCreationProcessesQueryResponse.builder()
-      .pagination(request.getPagination())
-      .size(count)
-      .users(users)
+      .page(repository.list(request.getPageable()))
+      .build();
+  }
+
+  @QueryHandler
+  public GetUserCreationProcessQueryResponse handle(final GetUserCreationProcessQuery request) {
+    return GetUserCreationProcessQueryResponse.builder()
+      .result(repository.get(request.getProcessId()))
       .build();
   }
 }
