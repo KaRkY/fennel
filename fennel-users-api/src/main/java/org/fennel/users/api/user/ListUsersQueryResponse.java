@@ -1,6 +1,6 @@
 package org.fennel.users.api.user;
 
-import org.springframework.data.domain.Page;
+import org.fennel.api.common.Page;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

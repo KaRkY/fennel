@@ -2,6 +2,8 @@ package org.fennel.users.query.usercreationprocess;
 
 import java.util.Optional;
 
+import org.fennel.api.common.Page;
+import org.fennel.api.common.Pageable;
 import org.fennel.common.JooqUtil;
 import org.fennel.users.api.usercreationprocess.UserCreationProcessQueryObject;
 import org.fennel.users.query.jooq.Tables;
@@ -9,9 +11,6 @@ import org.jooq.DSLContext;
 import org.jooq.Record5;
 import org.jooq.ResultQuery;
 import org.jooq.SelectSeekStepN;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 
 public class Repository {
 
@@ -23,28 +22,28 @@ public class Repository {
 
   public void insert(final UserCreationProcessQueryObject event) {
     create
-      .insertInto(Tables.USER_CREATION_PROCESSES)
-      .columns(
-        Tables.USER_CREATION_PROCESSES.PROCESS_ID,
-        Tables.USER_CREATION_PROCESSES.DISPLAY_NAME,
-        Tables.USER_CREATION_PROCESSES.USERNAME,
-        Tables.USER_CREATION_PROCESSES.PASSWORD,
-        Tables.USER_CREATION_PROCESSES.STATE)
-      .values(
-        event.getProcessId(),
-        event.getDisplayName(),
-        event.getUsername(),
-        event.getPassword(),
-        event.getState())
-      .execute();
+    .insertInto(Tables.USER_CREATION_PROCESSES)
+    .columns(
+      Tables.USER_CREATION_PROCESSES.PROCESS_ID,
+      Tables.USER_CREATION_PROCESSES.DISPLAY_NAME,
+      Tables.USER_CREATION_PROCESSES.USERNAME,
+      Tables.USER_CREATION_PROCESSES.PASSWORD,
+      Tables.USER_CREATION_PROCESSES.STATE)
+    .values(
+      event.getProcessId(),
+      event.getDisplayName(),
+      event.getUsername(),
+      event.getPassword(),
+      event.getState())
+    .execute();
   }
 
   public void updateState(final String processId, final String state) {
     create
-      .update(Tables.USER_CREATION_PROCESSES)
-      .set(Tables.USER_CREATION_PROCESSES.STATE, state)
-      .where(Tables.USER_CREATION_PROCESSES.PROCESS_ID.eq(processId))
-      .execute();
+    .update(Tables.USER_CREATION_PROCESSES)
+    .set(Tables.USER_CREATION_PROCESSES.STATE, state)
+    .where(Tables.USER_CREATION_PROCESSES.PROCESS_ID.eq(processId))
+    .execute();
   }
 
   public Integer count() {
@@ -62,7 +61,7 @@ public class Repository {
       Tables.USER_CREATION_PROCESSES.STATE)
       .from(Tables.USER_CREATION_PROCESSES)
       .orderBy(JooqUtil.map(
-        pageable.getSort(),
+        pageable.getSortProperties(),
         property -> {
           switch (property) {
           case "displayName":
@@ -88,15 +87,17 @@ public class Repository {
       resQuery = select;
     }
 
-    return new PageImpl<>(resQuery
-      .fetch(record -> UserCreationProcessQueryObject.builder()
-        .processId(record.get(Tables.USER_CREATION_PROCESSES.PROCESS_ID))
-        .displayName(record.get(Tables.USER_CREATION_PROCESSES.DISPLAY_NAME))
-        .username(record.get(Tables.USER_CREATION_PROCESSES.USERNAME))
-        .password(record.get(Tables.USER_CREATION_PROCESSES.PASSWORD))
-        .state(record.get(Tables.USER_CREATION_PROCESSES.STATE))
-        .build()),
-      pageable, count());
+    return Page.<UserCreationProcessQueryObject>builder()
+      .elements(resQuery
+        .fetch(record -> UserCreationProcessQueryObject.builder()
+          .processId(record.get(Tables.USER_CREATION_PROCESSES.PROCESS_ID))
+          .displayName(record.get(Tables.USER_CREATION_PROCESSES.DISPLAY_NAME))
+          .username(record.get(Tables.USER_CREATION_PROCESSES.USERNAME))
+          .password(record.get(Tables.USER_CREATION_PROCESSES.PASSWORD))
+          .state(record.get(Tables.USER_CREATION_PROCESSES.STATE))
+          .build()))
+      .total(count())
+      .build();
   }
 
   public Optional<UserCreationProcessQueryObject> get(final String processId) {

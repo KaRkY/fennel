@@ -1,6 +1,4 @@
-package org.fennel.users.api.usercreationprocess;
-
-import org.fennel.api.common.Pageable;
+package org.fennel.service;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,8 +10,8 @@ import lombok.Value;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ListUserCreationProcessesQuery {
+public class ServiceProperties {
 
-  private final Pageable pageable;
-
+  private final String publicGroupName;
+  private final String internalGroupName;
 }

@@ -2,21 +2,21 @@ package org.fennel.common;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.fennel.api.common.SortDirection;
 import org.jooq.Field;
 import org.jooq.SortField;
 import org.jooq.SortOrder;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class JooqUtil {
 
-  public static SortOrder map(final Direction direction) {
+  public static SortOrder map(final SortDirection direction) {
     switch (direction) {
     case ASC:
       return SortOrder.ASC;
@@ -24,17 +24,21 @@ public class JooqUtil {
     case DESC:
       return SortOrder.DESC;
 
+    case DEFAULT:
+      return SortOrder.DEFAULT;
+
     default:
       return SortOrder.DEFAULT;
     }
   }
 
-  public static List<SortField<?>> map(final Sort sort, final Function<String, Field<?>> mapping) {
-    if (sort.isSorted()) return sort
+  public static List<SortField<?>> map(final Map<String, SortDirection> sortProperties, final Function<String, Field<?>> mapping) {
+    if (!sortProperties.isEmpty()) return sortProperties
+      .entrySet()
       .stream()
-      .map(field -> {
-        final Field<?> mappedField = mapping.apply(field.getProperty());
-        if (mappedField != null) return mappedField.sort(map(field.getDirection()));
+      .map(entry -> {
+        final Field<?> mappedField = mapping.apply(entry.getKey());
+        if (mappedField != null) return mappedField.sort(map(entry.getValue()));
         else return null;
       })
       .filter(d -> d != null)

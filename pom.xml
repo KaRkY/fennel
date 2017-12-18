@@ -153,5 +153,7 @@
     <module>fennel-rest</module>
     <module>fennel-services-api</module>
     <module>fennel-services</module>
+    <module>fennel-users-service</module>
+    <module>fennel-api-common</module>
   </modules>
 </project>

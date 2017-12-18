@@ -19,14 +19,16 @@ import org.fennel.users.api.user.LockedEvent;
 import org.fennel.users.api.user.RoleAddedEvent;
 import org.fennel.users.api.user.UnlockCommand;
 import org.fennel.users.api.user.UnlockedEvent;
+import org.fennel.users.api.user.UserType;
 
 @Aggregate
 public class User implements Serializable {
   private static final long serialVersionUID = -1774630893759721415L;
 
   @AggregateIdentifier
-  private String  userId;
-  private boolean locked;
+  private String   userId;
+  private boolean  locked;
+  private UserType type;
 
   public User() {
   }
@@ -39,11 +41,14 @@ public class User implements Serializable {
       .username(command.getUsername())
       .password(command.getPassword())
       .locked(false)
+      .type(command.getType())
+      .userData(command.getUserData())
       .build());
   }
 
   @CommandHandler
   public void handle(final LockCommand command) {
+    if(UserType.SYSTEM == type) throw new UnsupportedOperationException();
     if (!locked) {
       AggregateLifecycle.apply(LockedEvent.builder()
         .userId(command.getUserId())
@@ -53,6 +58,7 @@ public class User implements Serializable {
 
   @CommandHandler
   public void handle(final UnlockCommand command) {
+    if(UserType.SYSTEM == type) throw new UnsupportedOperationException();
     if (locked) {
       AggregateLifecycle.apply(UnlockedEvent.builder()
         .userId(command.getUserId())
@@ -87,6 +93,7 @@ public class User implements Serializable {
   public void on(final CreatedEvent event) {
     userId = event.getUserId();
     locked = event.isLocked();
+    type = event.getType();
   }
 
   @EventSourcingHandler

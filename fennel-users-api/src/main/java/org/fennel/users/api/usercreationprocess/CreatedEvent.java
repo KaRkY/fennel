@@ -12,10 +12,11 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreatedEvent {
 
-  private final String processId;
-  private final String pin;
-  private final String displayName;
-  private final String username;
-  private final String password;
+  private final String  processId;
+  private final String  pin;
+  private final String  displayName;
+  private final String  username;
+  private final String  password;
+  private final boolean confirmed;
 
 }

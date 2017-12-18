@@ -1,11 +1,11 @@
 --- Users ---
  - Group locking
  - Group unlocking
- - Simple query model
- - Simple management GUI
- - User confirmation Saga
- - UserCreationProcess as AR.
- - Test user creation process states
+ - Different events for creating user(Registration through UCP, Admin create through UCP, System create for admin and system users)
+ - Make Users AR compatible with system user
+ - System user does not have password and can never be user as login it is intended for system generated events
+   like escalation, scheduled events, intermediate events.
+ - Make anonymous user same as System except it is used when user information is missing
 
 --- Customers ---
  - Define which data is needed for customer(VAT number, Name, etc.)
@@ -13,10 +13,6 @@
  - Removing addresses
  - Adding contacts
  - Removing contacts
-
---- Tasks ---
- - Implement Task lifecycle (Assign, Claim, Escalate(Quarz timer), Release, Intermediat save, etc.)
- - Taks data(Title, Description, Connections to other Aggregates)
 
 --- Other ---
  - Products?
@@ -30,3 +26,6 @@
 
 --- Presentation GUI ---
  - Reports
+
+--- General
+ - Should I have an abstract class for all commands and events with general data like user who invoked command?

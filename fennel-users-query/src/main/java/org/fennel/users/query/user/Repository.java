@@ -2,6 +2,8 @@ package org.fennel.users.query.user;
 
 import java.util.Optional;
 
+import org.fennel.api.common.Page;
+import org.fennel.api.common.Pageable;
 import org.fennel.common.JooqUtil;
 import org.fennel.users.api.user.CreatedEvent;
 import org.fennel.users.api.user.UserQueryObject;
@@ -10,9 +12,6 @@ import org.jooq.DSLContext;
 import org.jooq.Record4;
 import org.jooq.ResultQuery;
 import org.jooq.SelectSeekStepN;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 
 public class Repository {
 
@@ -24,20 +23,20 @@ public class Repository {
 
   public void insert(final CreatedEvent event) {
     create
-      .insertInto(Tables.USERS)
-      .columns(
-        Tables.USERS.USER_ID,
-        Tables.USERS.DISPLAY_NAME,
-        Tables.USERS.USERNAME,
-        Tables.USERS.PASSWORD,
-        Tables.USERS.LOCKED)
-      .values(
-        event.getUserId(),
-        event.getDisplayName(),
-        event.getUsername(),
-        event.getPassword(),
-        event.isLocked())
-      .execute();
+    .insertInto(Tables.USERS)
+    .columns(
+      Tables.USERS.USER_ID,
+      Tables.USERS.DISPLAY_NAME,
+      Tables.USERS.USERNAME,
+      Tables.USERS.PASSWORD,
+      Tables.USERS.LOCKED)
+    .values(
+      event.getUserId(),
+      event.getDisplayName(),
+      event.getUsername(),
+      event.getPassword(),
+      event.isLocked())
+    .execute();
   }
 
   public boolean containsUser(final String username) {
@@ -69,7 +68,7 @@ public class Repository {
         Tables.USERS.LOCKED)
       .from(Tables.USERS)
       .orderBy(JooqUtil.map(
-        pageable.getSort(),
+        pageable.getSortProperties(),
         property -> {
           switch (property) {
           case "displayName":
@@ -92,14 +91,16 @@ public class Repository {
       resQuery = select;
     }
 
-    return new PageImpl<>(resQuery
-      .fetch(record -> UserQueryObject.builder()
-        .userId(record.get(Tables.USERS.USER_ID))
-        .displayName(record.get(Tables.USERS.DISPLAY_NAME))
-        .username(record.get(Tables.USERS.USERNAME))
-        .locked(record.get(Tables.USERS.LOCKED))
-        .build()),
-      pageable, count());
+    return Page.<UserQueryObject>builder()
+      .elements(resQuery
+        .fetch(record -> UserQueryObject.builder()
+          .userId(record.get(Tables.USERS.USER_ID))
+          .displayName(record.get(Tables.USERS.DISPLAY_NAME))
+          .username(record.get(Tables.USERS.USERNAME))
+          .locked(record.get(Tables.USERS.LOCKED))
+          .build()))
+      .total(count())
+      .build();
   }
 
   public Optional<UserQueryObject> get(final String userId) {

@@ -1,6 +1,6 @@
 package org.fennel.users.api.user;
 
-import org.springframework.data.domain.Pageable;
+import org.fennel.api.common.Pageable;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
