@@ -4,11 +4,11 @@ import java.util.UUID;
 
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.queryhandling.QueryGateway;
-import org.fennel.common.StringUtil;
-import org.fennel.users.api.user.AnyUserAvaibleQuery;
-import org.fennel.users.api.user.AnyUserAvaibleQueryResponse;
-import org.fennel.users.api.usercreationprocess.ConfirmCommand;
-import org.fennel.users.api.usercreationprocess.CreateCommand;
+import org.fennel.common.util.StringUtil;
+import org.fennel.users.command.usercreationprocess.ConfirmCommand;
+import org.fennel.users.command.usercreationprocess.CreateCommand;
+import org.fennel.users.query.user.AnyUserAvaibleQuery;
+import org.fennel.users.query.user.AnyUserAvaibleQueryResponse;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;

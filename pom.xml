@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.fennel</groupId>
@@ -14,7 +14,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>2.0.0.M7</version>
-    <relativePath /> <!-- lookup parent from repository -->
+    <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
   <properties>
@@ -145,15 +145,8 @@
 
   <modules>
     <module>fennel-common</module>
-    <module>fennel-users-api</module>
-    <module>fennel-users-command</module>
-    <module>fennel-users-query</module>
-    <module>fennel-customers-api</module>
-    <module>fennel-customers-command</module>
     <module>fennel-rest</module>
-    <module>fennel-services-api</module>
-    <module>fennel-services</module>
-    <module>fennel-users-service</module>
-    <module>fennel-api-common</module>
+    <module>fennel-users</module>
+    <module>fennel-customers</module>
   </modules>
 </project>

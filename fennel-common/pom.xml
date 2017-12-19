@@ -3,6 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>fennel-common</artifactId>
+  <packaging>pom</packaging>
 
   <parent>
     <groupId>org.fennel</groupId>
@@ -10,21 +11,10 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jooq</groupId>
-      <artifactId>jooq</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>fennel-api-common</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-  </dependencies>
+  <modules>
+    <module>fennel-common-util</module>
+    <module>fennel-common-jooq</module>
+    <module>fennel-common-services-api</module>
+    <module>fennel-common-services-impl</module>
+  </modules>
 </project>

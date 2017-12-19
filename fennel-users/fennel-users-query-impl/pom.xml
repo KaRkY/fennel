@@ -1,0 +1,131 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>fennel-users-query-impl</artifactId>
+
+  <parent>
+    <groupId>org.fennel</groupId>
+    <artifactId>fennel-users</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <build>
+    <plugins>
+      <plugin>
+
+        <!-- Specify the maven code generator plugin -->
+        <!-- Use org.jooq for the Open Source Edition org.jooq.pro for commercial editions, org.jooq.pro-java-6 for commercial
+          editions with Java 6 support, org.jooq.trial for the free trial edition Note: Only the Open Source Edition is hosted on Maven
+          Central. Import the others manually from your distribution -->
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-codegen-maven</artifactId>
+
+        <!-- The plugin should hook into the generate goal -->
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+
+        <!-- Manage the plugin's dependency. In this example, we'll use a PostgreSQL database -->
+        <dependencies>
+          <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+          </dependency>
+        </dependencies>
+
+        <!-- Specify the plugin configuration. The configuration format is the same as for the standalone code generator -->
+        <configuration>
+
+          <!-- JDBC connection parameters -->
+          <jdbc>
+            <driver>org.postgresql.Driver</driver>
+            <url>${database.url}</url>
+            <user>${database.user}</user>
+            <password>${database.password}</password>
+          </jdbc>
+
+          <!-- Generator parameters -->
+          <generator>
+
+            <database>
+              <name>org.jooq.util.postgres.PostgresDatabase</name>
+              <includes>
+                users
+                | user_creation_processes
+              </includes>
+              <excludes></excludes>
+              <schemata>
+                <schema>
+                  <inputSchema>fennel</inputSchema>
+                </schema>
+              </schemata>
+            </database>
+
+            <generate>
+              <javaTimeTypes>true</javaTimeTypes>
+            </generate>
+
+            <target>
+              <packageName>org.fennel.users.query.jooq</packageName>
+            </target>
+
+          </generator>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.axonframework</groupId>
+      <artifactId>axon-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jooq</groupId>
+      <artifactId>jooq</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>fennel-common-util</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>fennel-common-jooq</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>fennel-users-command-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>fennel-users-query-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.axonframework</groupId>
+      <artifactId>axon-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

@@ -53,54 +53,56 @@
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>fennel-common</artifactId>
+      <artifactId>fennel-common-util</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>fennel-users-api</artifactId>
+      <artifactId>fennel-common-services-api</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>fennel-services-api</artifactId>
+      <artifactId>fennel-common-services-impl</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>fennel-customers-api</artifactId>
+      <artifactId>fennel-users-command-api</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>fennel-users-command</artifactId>
+      <artifactId>fennel-users-command-impl</artifactId>
       <version>${project.version}</version>
-      <scope>runtime</scope>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>fennel-users-query</artifactId>
+      <artifactId>fennel-users-query-api</artifactId>
       <version>${project.version}</version>
-      <scope>runtime</scope>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>fennel-customers-command</artifactId>
+      <artifactId>fennel-users-query-impl</artifactId>
       <version>${project.version}</version>
-      <scope>runtime</scope>
     </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>fennel-services</artifactId>
+      <artifactId>fennel-customers-command-api</artifactId>
       <version>${project.version}</version>
-      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>fennel-customers-command-impl</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
