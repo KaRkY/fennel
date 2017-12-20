@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_outer_classname = "UsersProto";
+option objc_class_prefix = "UP";
+
+package org.fennel.servers.users.grpc;
+
+service Users {
+
+  rpc createUser(UserRequest) returns (CreateUserResponse) {}
+
+}
+
+message UserRequest {
+
+  string displayName = 1;
+
+  string username = 2;
+
+  string password = 3;
+
+}
+
+message CreateUserResponse {
+
+  string userId = 1;
+}
