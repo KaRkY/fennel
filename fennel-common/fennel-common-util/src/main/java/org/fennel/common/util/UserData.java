@@ -18,7 +18,6 @@ public class UserData {
 
   @NonNull
   private final String      userId;
-  @NonNull
   private final String      defaultGroup;
   @Singular
   private final Set<String> groups;

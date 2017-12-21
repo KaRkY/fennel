@@ -9,21 +9,21 @@ import org.fennel.users.services.User;
 
 public class DefaultAdminUserService implements AdminUserService {
 
-  private CommandGateway     commandGateway;
-  private IdGeneratorService idGenerator;
+  private final CommandGateway     commandGateway;
+  private final IdGeneratorService idGenerator;
 
   public DefaultAdminUserService(
-    CommandGateway commandGateway,
-    IdGeneratorService idGenerator) {
+    final CommandGateway commandGateway,
+    final IdGeneratorService idGenerator) {
     this.commandGateway = commandGateway;
     this.idGenerator = idGenerator;
   }
 
   @Override
-  public String create(User user, AuthorizationData authorizationData) {
-    String processId = idGenerator.generate("userCreationProcess");
+  public String create(final User user, final AuthorizationData authorizationData) {
+    final String processId = idGenerator.generate("userCreationProcess");
 
-    CreateCommand createCommand = CreateCommand.builder()
+    final CreateCommand createCommand = CreateCommand.builder()
       .processId(processId)
       .displayName(user.getDisplayName())
       .username(user.getUsername())

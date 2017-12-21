@@ -40,247 +40,247 @@ public class UserCreationProcessSagaTests {
   @Test
   public void createConfirmedUser() throws Exception {
     Mockito.when(userCheck.check(ArgumentMatchers.any(User.class)))
-    .thenReturn(CompletableFuture.completedFuture(true));
+      .thenReturn(CompletableFuture.completedFuture(true));
 
     fixture
-    .whenAggregate("1234").publishes(CreatedEvent.builder()
-      .processId("1234")
-      .pin("4321")
-      .displayName("user")
-      .username("username")
-      .password("password")
-      .confirmed(true)
-      .build())
-    .expectDispatchedCommands(
-      DataCheckCommand.builder()
-      .processId("1234")
-      .build(),
-      ConfirmedCommand.builder()
-      .processId("1234")
-      .build())
-    .expectNoScheduledEvents();
+      .whenAggregate("1234").publishes(CreatedEvent.builder()
+        .processId("1234")
+        .pin("4321")
+        .displayName("user")
+        .username("username")
+        .password("password")
+        .confirmed(true)
+        .build())
+      .expectDispatchedCommands(
+        DataCheckCommand.builder()
+          .processId("1234")
+          .build(),
+        ConfirmedCommand.builder()
+          .processId("1234")
+          .build())
+      .expectNoScheduledEvents();
   }
 
   @Test
   public void scheduleDeletionOfUserIfUnconfirmedFor30Days() throws Exception {
     Mockito.when(userCheck.check(ArgumentMatchers.any(User.class)))
-    .thenReturn(CompletableFuture.completedFuture(true));
+      .thenReturn(CompletableFuture.completedFuture(true));
 
     fixture
-    .whenAggregate("1234").publishes(CreatedEvent.builder()
-      .processId("1234")
-      .pin("4321")
-      .displayName("user")
-      .username("username")
-      .password("password")
-      .build())
-    .expectScheduledEvent(Duration.ofDays(30), TerminatedEvent.builder()
-      .processId("1234")
-      .build());
+      .whenAggregate("1234").publishes(CreatedEvent.builder()
+        .processId("1234")
+        .pin("4321")
+        .displayName("user")
+        .username("username")
+        .password("password")
+        .build())
+      .expectScheduledEvent(Duration.ofDays(30), TerminatedEvent.builder()
+        .processId("1234")
+        .build());
   }
 
   @Test
   public void validateUsername() throws Exception {
 
     Mockito
-    .when(userCheck.check(User.builder()
-      .displayName("user1")
-      .username("username1")
-      .password("password1")
-      .processId("1")
-      .build()))
-    .thenReturn(CompletableFuture.completedFuture(true));
+      .when(userCheck.check(User.builder()
+        .displayName("user1")
+        .username("username1")
+        .password("password1")
+        .processId("1")
+        .build()))
+      .thenReturn(CompletableFuture.completedFuture(true));
     Mockito
-    .when(userCheck.check(User.builder()
-      .displayName("user2")
-      .username("username2")
-      .password("password2")
-      .processId("2")
-      .build()))
-    .thenReturn(CompletableFuture.completedFuture(true));
+      .when(userCheck.check(User.builder()
+        .displayName("user2")
+        .username("username2")
+        .password("password2")
+        .processId("2")
+        .build()))
+      .thenReturn(CompletableFuture.completedFuture(true));
 
     fixture
-    .givenAggregate("1").published(CreatedEvent.builder()
-      .processId("1")
-      .pin("1")
-      .displayName("user1")
-      .username("username1")
-      .password("password1")
-      .build())
-    .whenAggregate("2").publishes(CreatedEvent.builder()
-      .processId("2")
-      .pin("2")
-      .displayName("user2")
-      .username("username2")
-      .password("password2")
-      .build())
-    .expectDispatchedCommands(DataCheckCommand.builder()
-      .processId("2")
-      .build())
-    .expectActiveSagas(2);
+      .givenAggregate("1").published(CreatedEvent.builder()
+        .processId("1")
+        .pin("1")
+        .displayName("user1")
+        .username("username1")
+        .password("password1")
+        .build())
+      .whenAggregate("2").publishes(CreatedEvent.builder()
+        .processId("2")
+        .pin("2")
+        .displayName("user2")
+        .username("username2")
+        .password("password2")
+        .build())
+      .expectDispatchedCommands(DataCheckCommand.builder()
+        .processId("2")
+        .build())
+      .expectActiveSagas(2);
   }
 
   @Test
   public void validateUsernameDuplicate() throws Exception {
 
     Mockito
-    .when(userCheck.check(User.builder()
-      .displayName("user1")
-      .username("username")
-      .password("password1")
-      .processId("1")
-      .build()))
-    .thenReturn(CompletableFuture.completedFuture(true));
+      .when(userCheck.check(User.builder()
+        .displayName("user1")
+        .username("username")
+        .password("password1")
+        .processId("1")
+        .build()))
+      .thenReturn(CompletableFuture.completedFuture(true));
 
     Mockito
-    .when(userCheck.check(User.builder()
-      .displayName("user2")
-      .username("username")
-      .password("password2")
-      .processId("2")
-      .build()))
-    .thenReturn(CompletableFuture.completedFuture(false));
+      .when(userCheck.check(User.builder()
+        .displayName("user2")
+        .username("username")
+        .password("password2")
+        .processId("2")
+        .build()))
+      .thenReturn(CompletableFuture.completedFuture(false));
 
     fixture
-    .givenAggregate("1").published(CreatedEvent.builder()
-      .processId("1")
-      .pin("1")
-      .displayName("user1")
-      .username("username")
-      .password("password1")
-      .build())
-    .whenAggregate("2").publishes(CreatedEvent.builder()
-      .processId("2")
-      .pin("2")
-      .displayName("user2")
-      .username("username")
-      .password("password2")
-      .build())
-    .expectDispatchedCommands(FailCheckCommand.builder()
-      .processId("2")
-      .build());
+      .givenAggregate("1").published(CreatedEvent.builder()
+        .processId("1")
+        .pin("1")
+        .displayName("user1")
+        .username("username")
+        .password("password1")
+        .build())
+      .whenAggregate("2").publishes(CreatedEvent.builder()
+        .processId("2")
+        .pin("2")
+        .displayName("user2")
+        .username("username")
+        .password("password2")
+        .build())
+      .expectDispatchedCommands(FailCheckCommand.builder()
+        .processId("2")
+        .build());
   }
 
   @Test
   public void confirmUser() throws Exception {
     Mockito.when(userCheck.check(ArgumentMatchers.any(User.class)))
-    .thenReturn(CompletableFuture.supplyAsync(() -> true));
+      .thenReturn(CompletableFuture.supplyAsync(() -> true));
 
     fixture
-    .givenAggregate("1234").published(CreatedEvent.builder()
-      .processId("1234")
-      .pin("4321")
-      .displayName("user")
-      .username("username")
-      .password("password")
-      .build())
-    .whenAggregate("1234").publishes(ConfirmEvent.builder()
-      .processId("1234")
-      .pin("4321")
-      .build())
-    .expectDispatchedCommands(ConfirmedCommand.builder()
-      .processId("1234")
-      .build())
-    .expectNoScheduledEvents();
+      .givenAggregate("1234").published(CreatedEvent.builder()
+        .processId("1234")
+        .pin("4321")
+        .displayName("user")
+        .username("username")
+        .password("password")
+        .build())
+      .whenAggregate("1234").publishes(ConfirmEvent.builder()
+        .processId("1234")
+        .pin("4321")
+        .build())
+      .expectDispatchedCommands(ConfirmedCommand.builder()
+        .processId("1234")
+        .build())
+      .expectNoScheduledEvents();
   }
 
   @Test
   public void createUser() throws Exception {
     Mockito.when(userCheck.check(ArgumentMatchers.any(User.class)))
-    .thenReturn(CompletableFuture.supplyAsync(() -> true));
+      .thenReturn(CompletableFuture.supplyAsync(() -> true));
 
     Mockito.when(idGenerator.generate("user")).thenReturn("1234");
 
     fixture
-    .givenAggregate("1234").published(CreatedEvent.builder()
-      .processId("1234")
-      .pin("4321")
-      .displayName("user")
-      .username("username")
-      .password("password")
-      .confirmed(true)
-      .build())
-    .whenAggregate("1234").publishes(ConfirmedEvent.builder()
-      .processId("1234")
-      .build())
-    .expectDispatchedCommands(
-      CreateCommand.builder()
-      .userId("1234")
-      .processId("1234")
-      .displayName("user")
-      .username("username")
-      .password("password")
-      .type(UserType.NORMAL)
-      .userData(UserData.builder()
-        .userId("1234")
+      .givenAggregate("1234").published(CreatedEvent.builder()
+        .processId("1234")
+        .pin("4321")
+        .displayName("user")
+        .username("username")
+        .password("password")
+        .confirmed(true)
         .build())
-      .build())
-    .expectNoScheduledEvents();
+      .whenAggregate("1234").publishes(ConfirmedEvent.builder()
+        .processId("1234")
+        .build())
+      .expectDispatchedCommands(
+        CreateCommand.builder()
+          .userId("1234")
+          .processId("1234")
+          .displayName("user")
+          .username("username")
+          .password("password")
+          .type(UserType.NORMAL)
+          .userData(UserData.builder()
+            .userId("1234")
+            .build())
+          .build())
+      .expectNoScheduledEvents();
   }
 
   @Test
   public void falsePinConfirmUser() throws Exception {
     Mockito.when(userCheck.check(ArgumentMatchers.any(User.class)))
-    .thenReturn(CompletableFuture.completedFuture(true));
+      .thenReturn(CompletableFuture.completedFuture(true));
 
     fixture
-    .givenAggregate("1234").published(CreatedEvent.builder()
-      .processId("1234")
-      .pin("4321")
-      .displayName("user")
-      .username("username")
-      .password("password")
-      .build())
-    .whenAggregate("1234").publishes(ConfirmEvent.builder()
-      .processId("1234")
-      .pin("43211")
-      .build())
-    .expectActiveSagas(1);
+      .givenAggregate("1234").published(CreatedEvent.builder()
+        .processId("1234")
+        .pin("4321")
+        .displayName("user")
+        .username("username")
+        .password("password")
+        .build())
+      .whenAggregate("1234").publishes(ConfirmEvent.builder()
+        .processId("1234")
+        .pin("43211")
+        .build())
+      .expectActiveSagas(1);
   }
 
   @Test
   public void newPinConfirmUser() throws Exception {
     Mockito.when(userCheck.check(ArgumentMatchers.any(User.class)))
-    .thenReturn(CompletableFuture.completedFuture(true));
+      .thenReturn(CompletableFuture.completedFuture(true));
 
     fixture
-    .givenAggregate("1234").published(CreatedEvent.builder()
-      .processId("1234")
-      .pin("4321")
-      .displayName("user")
-      .username("username")
-      .password("password")
-      .build())
-    .andThenAggregate("1234").published(NewPinEvent.builder()
-      .processId("1234")
-      .pin("asdf")
-      .build())
-    .whenAggregate("1234").publishes(ConfirmEvent.builder()
-      .processId("1234")
-      .pin("asdf")
-      .build())
-    .expectDispatchedCommands(ConfirmedCommand.builder()
-      .processId("1234")
-      .build())
-    .expectNoScheduledEvents();
+      .givenAggregate("1234").published(CreatedEvent.builder()
+        .processId("1234")
+        .pin("4321")
+        .displayName("user")
+        .username("username")
+        .password("password")
+        .build())
+      .andThenAggregate("1234").published(NewPinEvent.builder()
+        .processId("1234")
+        .pin("asdf")
+        .build())
+      .whenAggregate("1234").publishes(ConfirmEvent.builder()
+        .processId("1234")
+        .pin("asdf")
+        .build())
+      .expectDispatchedCommands(ConfirmedCommand.builder()
+        .processId("1234")
+        .build())
+      .expectNoScheduledEvents();
   }
 
   @Test
   public void forceTerminateSaga() throws Exception {
     Mockito.when(userCheck.check(ArgumentMatchers.any(User.class)))
-    .thenReturn(CompletableFuture.completedFuture(true));
+      .thenReturn(CompletableFuture.completedFuture(true));
 
     fixture
-    .givenAggregate("1234").published(CreatedEvent.builder()
-      .processId("1234")
-      .pin("4321")
-      .displayName("user")
-      .username("username")
-      .password("password")
-      .build())
-    .whenPublishingA(TerminatedEvent.builder()
-      .processId("1234")
-      .build())
-    .expectActiveSagas(0);
+      .givenAggregate("1234").published(CreatedEvent.builder()
+        .processId("1234")
+        .pin("4321")
+        .displayName("user")
+        .username("username")
+        .password("password")
+        .build())
+      .whenPublishingA(TerminatedEvent.builder()
+        .processId("1234")
+        .build())
+      .expectActiveSagas(0);
   }
 }

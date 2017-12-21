@@ -10,17 +10,16 @@ import io.grpc.Context;
 import io.grpc.stub.StreamObserver;
 
 public class GrpcUsersService extends UsersImplBase {
-  private UserService userService;
+  private final UserService userService;
 
-  public GrpcUsersService(UserService userService) {
+  public GrpcUsersService(final UserService userService) {
     this.userService = userService;
   }
 
-
   @Override
-  public void createUser(UserRequest request, StreamObserver<CreateUserResponse> responseObserver) {
-    Context.<String>key("userId").get(); //User populated in interceptor
-    String userId = userService.create(User.builder()
+  public void createUser(final UserRequest request, final StreamObserver<CreateUserResponse> responseObserver) {
+    Context.<String>key("userId").get(); // User populated in interceptor
+    final String userId = userService.create(User.builder()
       .displayName(request.getDisplayName())
       .username(request.getUsername())
       .password(request.getPassword())

@@ -36,15 +36,13 @@ public class UserFailedAttemptLockingSaga {
     if (attempts.size() > 5) {
       attempts.removeFirst();
     } else {
-      if (attempts.size() == 5) {
-        if (Duration.between(attempts.peekFirst(), time).toMinutes() < 5) {
-          commandGateway.send(LockCommand.builder()
-            .userId(event.getUserId())
-            .build());
-          lockedToken = eventScheduler.schedule(Duration.ofMinutes(5), UnlockedEvent.builder()
-            .userId(event.getUserId())
-            .build());
-        }
+      if (attempts.size() == 5 && Duration.between(attempts.peekFirst(), time).toMinutes() < 5) {
+        commandGateway.send(LockCommand.builder()
+          .userId(event.getUserId())
+          .build());
+        lockedToken = eventScheduler.schedule(Duration.ofMinutes(5), UnlockedEvent.builder()
+          .userId(event.getUserId())
+          .build());
       }
     }
   }

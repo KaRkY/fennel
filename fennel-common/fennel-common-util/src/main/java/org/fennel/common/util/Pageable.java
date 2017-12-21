@@ -9,9 +9,11 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
 import lombok.Value;
+import lombok.experimental.Wither;
 
 @Value
 @Builder
+@Wither
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Pageable implements Serializable {

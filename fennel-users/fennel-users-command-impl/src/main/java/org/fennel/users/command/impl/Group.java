@@ -22,6 +22,9 @@ import org.fennel.users.command.group.RoleAddedEvent;
 import org.fennel.users.command.group.RoleRemovedEvent;
 import org.fennel.users.command.group.UserAddedEvent;
 
+import lombok.Getter;
+
+@Getter
 @Aggregate
 public class Group implements Serializable {
   private static final long serialVersionUID = -1774630893759721415L;

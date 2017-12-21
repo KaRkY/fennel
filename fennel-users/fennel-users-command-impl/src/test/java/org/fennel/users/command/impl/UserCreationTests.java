@@ -27,28 +27,28 @@ public class UserCreationTests {
   @Test
   public void createUser() throws Exception {
     fixture
-    .given()
-    .when(CreateCommand.builder()
-      .userId("1234")
-      .displayName("User 1")
-      .username("user1@gmail.com")
-      .password("1234")
-      .type(UserType.NORMAL)
-      .userData(UserData.builder()
+      .given()
+      .when(CreateCommand.builder()
         .userId("1234")
+        .displayName("User 1")
+        .username("user1@gmail.com")
+        .password("1234")
+        .type(UserType.NORMAL)
+        .userData(UserData.builder()
+          .userId("1234")
+          .build())
         .build())
-      .build())
-    .expectEvents(CreatedEvent.builder()
-      .userId("1234")
-      .displayName("User 1")
-      .username("user1@gmail.com")
-      .password("1234")
-      .locked(false)
-      .type(UserType.NORMAL)
-      .userData(UserData.builder()
+      .expectEvents(CreatedEvent.builder()
         .userId("1234")
-        .build())
-      .build());
+        .displayName("User 1")
+        .username("user1@gmail.com")
+        .password("1234")
+        .locked(false)
+        .type(UserType.NORMAL)
+        .userData(UserData.builder()
+          .userId("1234")
+          .build())
+        .build());
   }
 
 }

@@ -16,14 +16,14 @@ import lombok.Value;
 public class CreatedEvent {
 
   @NonNull
-  private final String  userId;
+  private final String   userId;
   @NonNull
-  private final String  displayName;
+  private final String   displayName;
   @NonNull
-  private final String  username;
-  private final String  password;
-  private final String  processId;
-  private final boolean locked;
+  private final String   username;
+  private final String   password;
+  private final String   processId;
+  private final boolean  locked;
   @NonNull
   private final UserType type;
   @NonNull

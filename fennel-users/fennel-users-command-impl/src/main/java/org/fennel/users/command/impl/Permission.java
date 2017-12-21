@@ -10,6 +10,9 @@ import org.axonframework.spring.stereotype.Aggregate;
 import org.fennel.users.command.permission.CreateCommand;
 import org.fennel.users.command.permission.CreatedEvent;
 
+import lombok.Getter;
+
+@Getter
 @Aggregate
 public class Permission implements Serializable {
   private static final long serialVersionUID = 780262963137038368L;

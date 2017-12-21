@@ -9,12 +9,15 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.Singular;
 import lombok.Value;
+import lombok.experimental.Wither;
 
 @Value
 @Builder
+@Wither
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Page<T> implements Serializable {
+public class Page<T>
+  implements Serializable {
   private static final long serialVersionUID = 7935062263331123871L;
 
   @Singular

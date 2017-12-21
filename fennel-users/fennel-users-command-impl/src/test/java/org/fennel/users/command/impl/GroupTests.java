@@ -13,7 +13,6 @@ import org.fennel.users.command.group.RemoveRoleCommand;
 import org.fennel.users.command.group.RoleAddedEvent;
 import org.fennel.users.command.group.RoleRemovedEvent;
 import org.fennel.users.command.group.UserAddedEvent;
-import org.fennel.users.command.impl.Group;
 import org.junit.Before;
 import org.junit.Test;
 

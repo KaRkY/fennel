@@ -23,20 +23,20 @@ public class Repository {
 
   public void insert(final CreatedEvent event) {
     create
-    .insertInto(Tables.USERS)
-    .columns(
-      Tables.USERS.USER_ID,
-      Tables.USERS.DISPLAY_NAME,
-      Tables.USERS.USERNAME,
-      Tables.USERS.PASSWORD,
-      Tables.USERS.LOCKED)
-    .values(
-      event.getUserId(),
-      event.getDisplayName(),
-      event.getUsername(),
-      event.getPassword(),
-      event.isLocked())
-    .execute();
+      .insertInto(Tables.USERS)
+      .columns(
+        Tables.USERS.USER_ID,
+        Tables.USERS.DISPLAY_NAME,
+        Tables.USERS.USERNAME,
+        Tables.USERS.PASSWORD,
+        Tables.USERS.LOCKED)
+      .values(
+        event.getUserId(),
+        event.getDisplayName(),
+        event.getUsername(),
+        event.getPassword(),
+        event.isLocked())
+      .execute();
   }
 
   public boolean containsUser(final String username) {

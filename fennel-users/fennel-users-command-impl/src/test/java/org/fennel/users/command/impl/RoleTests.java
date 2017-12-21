@@ -1,7 +1,6 @@
 package org.fennel.users.command.impl;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
-import org.fennel.users.command.impl.Role;
 import org.fennel.users.command.role.AddPermissionCommand;
 import org.fennel.users.command.role.CreateCommand;
 import org.fennel.users.command.role.CreatedEvent;

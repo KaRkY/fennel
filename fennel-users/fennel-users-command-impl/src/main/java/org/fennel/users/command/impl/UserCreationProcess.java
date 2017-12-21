@@ -47,8 +47,7 @@ public class UserCreationProcess implements Serializable {
 
   @CommandHandler
   public void handle(final ConfirmCommand command) {
-    if (state != UserCreationProcessState.CHECKED)
-      throw new IllegalStateException("Process not in checked state.");
+    if (state != UserCreationProcessState.CHECKED) { throw new IllegalStateException("Process not in checked state."); }
 
     AggregateLifecycle.apply(ConfirmEvent.builder()
       .processId(processId)
@@ -73,8 +72,7 @@ public class UserCreationProcess implements Serializable {
 
   @CommandHandler
   public void handle(final DataCheckCommand command) {
-    if (state != UserCreationProcessState.PENDING_CHECK)
-      throw new IllegalStateException("Process not in pending check state.");
+    if (state != UserCreationProcessState.PENDING_CHECK) { throw new IllegalStateException("Process not in pending check state."); }
 
     AggregateLifecycle.apply(DataCheckedEvent.builder()
       .processId(processId)

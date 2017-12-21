@@ -22,28 +22,28 @@ public class Repository {
 
   public void insert(final UserCreationProcessQueryObject event) {
     create
-    .insertInto(Tables.USER_CREATION_PROCESSES)
-    .columns(
-      Tables.USER_CREATION_PROCESSES.PROCESS_ID,
-      Tables.USER_CREATION_PROCESSES.DISPLAY_NAME,
-      Tables.USER_CREATION_PROCESSES.USERNAME,
-      Tables.USER_CREATION_PROCESSES.PASSWORD,
-      Tables.USER_CREATION_PROCESSES.STATE)
-    .values(
-      event.getProcessId(),
-      event.getDisplayName(),
-      event.getUsername(),
-      event.getPassword(),
-      event.getState())
-    .execute();
+      .insertInto(Tables.USER_CREATION_PROCESSES)
+      .columns(
+        Tables.USER_CREATION_PROCESSES.PROCESS_ID,
+        Tables.USER_CREATION_PROCESSES.DISPLAY_NAME,
+        Tables.USER_CREATION_PROCESSES.USERNAME,
+        Tables.USER_CREATION_PROCESSES.PASSWORD,
+        Tables.USER_CREATION_PROCESSES.STATE)
+      .values(
+        event.getProcessId(),
+        event.getDisplayName(),
+        event.getUsername(),
+        event.getPassword(),
+        event.getState())
+      .execute();
   }
 
   public void updateState(final String processId, final String state) {
     create
-    .update(Tables.USER_CREATION_PROCESSES)
-    .set(Tables.USER_CREATION_PROCESSES.STATE, state)
-    .where(Tables.USER_CREATION_PROCESSES.PROCESS_ID.eq(processId))
-    .execute();
+      .update(Tables.USER_CREATION_PROCESSES)
+      .set(Tables.USER_CREATION_PROCESSES.STATE, state)
+      .where(Tables.USER_CREATION_PROCESSES.PROCESS_ID.eq(processId))
+      .execute();
   }
 
   public Integer count() {

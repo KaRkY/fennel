@@ -24,8 +24,9 @@ public class DefaultUserCheck implements UserCheck {
       .from(Tables.RESERVED_USERNAMES)
       .where(Tables.RESERVED_USERNAMES.USERNAME.eq(user.getUsername())));
 
-    if (exists) return CompletableFuture.completedFuture(false);
-    else {
+    if (exists) {
+      return CompletableFuture.completedFuture(false);
+    } else {
       create
         .insertInto(Tables.RESERVED_USERNAMES)
         .columns(Tables.RESERVED_USERNAMES.PROCESS_ID, Tables.RESERVED_USERNAMES.USERNAME)

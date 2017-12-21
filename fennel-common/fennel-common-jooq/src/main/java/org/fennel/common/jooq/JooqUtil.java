@@ -33,16 +33,22 @@ public class JooqUtil {
   }
 
   public static List<SortField<?>> map(final Map<String, SortDirection> sortProperties, final Function<String, Field<?>> mapping) {
-    if (!sortProperties.isEmpty()) return sortProperties
-      .entrySet()
-      .stream()
-      .map(entry -> {
-        final Field<?> mappedField = mapping.apply(entry.getKey());
-        if (mappedField != null) return mappedField.sort(map(entry.getValue()));
-        else return null;
-      })
-      .filter(d -> d != null)
-      .collect(Collectors.toList());
-    else return Collections.emptyList();
+    if (!sortProperties.isEmpty()) {
+      return sortProperties
+        .entrySet()
+        .stream()
+        .map(entry -> {
+          final Field<?> mappedField = mapping.apply(entry.getKey());
+          if (mappedField != null) {
+            return mappedField.sort(map(entry.getValue()));
+          } else {
+            return null;
+          }
+        })
+        .filter(d -> d != null)
+        .collect(Collectors.toList());
+    } else {
+      return Collections.emptyList();
+    }
   }
 }

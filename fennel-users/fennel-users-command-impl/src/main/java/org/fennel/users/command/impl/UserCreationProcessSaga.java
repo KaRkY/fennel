@@ -57,26 +57,26 @@ public class UserCreationProcessSaga {
       .password(password)
       .processId(event.getProcessId())
       .build())
-    .thenAccept(r -> {
-      if (r) {
-        commandGateway.send(DataCheckCommand.builder()
-          .processId(event.getProcessId())
-          .build());
-        if (event.isConfirmed()) {
-          commandGateway.sendAndWait(ConfirmedCommand.builder()
+      .thenAccept(r -> {
+        if (r) {
+          commandGateway.send(DataCheckCommand.builder()
             .processId(event.getProcessId())
             .build());
+          if (event.isConfirmed()) {
+            commandGateway.sendAndWait(ConfirmedCommand.builder()
+              .processId(event.getProcessId())
+              .build());
+          } else {
+            terminationToken = eventScheduler.schedule(Duration.ofDays(30), TerminatedEvent.builder()
+              .processId(event.getProcessId())
+              .build());
+          }
         } else {
-          terminationToken = eventScheduler.schedule(Duration.ofDays(30), TerminatedEvent.builder()
+          commandGateway.send(FailCheckCommand.builder()
             .processId(event.getProcessId())
             .build());
         }
-      } else {
-        commandGateway.send(FailCheckCommand.builder()
-          .processId(event.getProcessId())
-          .build());
-      }
-    });
+      });
   }
 
   @SagaEventHandler(associationProperty = "processId")

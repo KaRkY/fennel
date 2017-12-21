@@ -1,7 +1,6 @@
 package org.fennel.users.command.impl;
 
 import org.axonframework.test.aggregate.AggregateTestFixture;
-import org.fennel.users.command.impl.UserCreationProcess;
 import org.fennel.users.command.usercreationprocess.CreateCommand;
 import org.fennel.users.command.usercreationprocess.CreatedEvent;
 import org.junit.Before;
@@ -18,14 +17,14 @@ public class UserCreationProcessTests {
   @Test
   public void createUser() throws Exception {
     fixture
-        .given()
-        .when(CreateCommand.builder()
-            .processId("12344")
-            .pin("123")
-            .build())
-        .expectEvents(CreatedEvent.builder()
-            .processId("12344")
-            .pin("123")
-            .build());
+      .given()
+      .when(CreateCommand.builder()
+        .processId("12344")
+        .pin("123")
+        .build())
+      .expectEvents(CreatedEvent.builder()
+        .processId("12344")
+        .pin("123")
+        .build());
   }
 }

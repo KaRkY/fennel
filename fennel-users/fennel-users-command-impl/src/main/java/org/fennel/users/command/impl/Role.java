@@ -16,6 +16,9 @@ import org.fennel.users.command.role.PermissionAddedEvent;
 import org.fennel.users.command.role.PermissionRemovedEvent;
 import org.fennel.users.command.role.RemovePermissionCommand;
 
+import lombok.Getter;
+
+@Getter
 @Aggregate
 public class Role implements Serializable {
   private static final long serialVersionUID = 2134161503548088614L;

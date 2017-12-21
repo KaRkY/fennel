@@ -7,7 +7,6 @@ import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.commandhandling.model.AggregateLifecycle;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
-import org.fennel.common.services.UsersProperties;
 import org.fennel.users.command.user.AddRoleCommand;
 import org.fennel.users.command.user.AuthorizationFailedEvent;
 import org.fennel.users.command.user.AuthorizeCommand;
@@ -22,6 +21,9 @@ import org.fennel.users.command.user.UnlockCommand;
 import org.fennel.users.command.user.UnlockedEvent;
 import org.fennel.users.command.user.UserType;
 
+import lombok.Getter;
+
+@Getter
 @Aggregate
 public class User implements Serializable {
   private static final long serialVersionUID = -1774630893759721415L;
@@ -35,12 +37,7 @@ public class User implements Serializable {
   }
 
   @CommandHandler
-  public User(final CreateCommand command, UsersProperties usersProperties) {
-
-    if (!command.getUserData().getUserId().equals(usersProperties.getSystemUserId()) &&
-      !command.getUserData().getPermissions().contains("permisson name ????????"))
-      throw new UnsupportedOperationException("Some kind of error");
-
+  public User(final CreateCommand command) {
     AggregateLifecycle.apply(CreatedEvent.builder()
       .userId(command.getUserId())
       .displayName(command.getDisplayName())
@@ -54,7 +51,7 @@ public class User implements Serializable {
 
   @CommandHandler
   public void handle(final LockCommand command) {
-    if(UserType.SYSTEM == type) throw new UnsupportedOperationException();
+    if (UserType.SYSTEM == type) { throw new UnsupportedOperationException(); }
     if (!locked) {
       AggregateLifecycle.apply(LockedEvent.builder()
         .userId(command.getUserId())
@@ -64,7 +61,7 @@ public class User implements Serializable {
 
   @CommandHandler
   public void handle(final UnlockCommand command) {
-    if(UserType.SYSTEM == type) throw new UnsupportedOperationException();
+    if (UserType.SYSTEM == type) { throw new UnsupportedOperationException(); }
     if (locked) {
       AggregateLifecycle.apply(UnlockedEvent.builder()
         .userId(command.getUserId())

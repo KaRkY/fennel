@@ -8,6 +8,9 @@ import org.axonframework.commandhandling.model.AggregateLifecycle;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 
+import lombok.Getter;
+
+@Getter
 @Aggregate
 public class Customer implements Serializable {
   private static final long serialVersionUID = -1051646704866873459L;

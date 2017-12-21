@@ -7,7 +7,7 @@ import org.fennel.common.services.IdGeneratorService;
 public class DefaultIdGeneratorService implements IdGeneratorService {
 
   @Override
-  public String generate(String aggregateRoot) {
+  public String generate(final String aggregateRoot) {
     return UUID.randomUUID().toString();
   }
 
